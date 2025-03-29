@@ -10,6 +10,7 @@
     "build": "vue-tsc --build && vite build"
   },
   "dependencies": {
+    "uuid": "11.1.0",
     "vue": "3.5.13"
   },
   "devDependencies": {
