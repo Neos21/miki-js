@@ -17,6 +17,7 @@
     "vuetify": "3.7.19"
   },
   "devDependencies": {
+    "@mdi/font": "7.4.47",
     "@vitejs/plugin-vue": "5.2.3",
     "@vue/tsconfig": "0.7.0",
     "typescript": "5.7.3",
