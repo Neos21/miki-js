@@ -17,7 +17,7 @@ Wiki Using Misskey MiAuth
         - ページ固有の URL が発行される
     - [ ] ページを編集する
         - Markdown 形式
-        - WYSIWYG エディタ UI
+        - WYSIWYG エディタ UI ([ProseMirror](https://prosemirror.net) を使う)
         - 同時編集が競合しないようにする
     - [ ] ページを削除する
     - [ ] ページに画像ファイルを添付する
