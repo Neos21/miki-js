@@ -26,7 +26,7 @@ const getUser = async () => {
 </script>
 
 <template>
-  <h1>Miki.js</h1>
+  <h2>Miki.js Home</h2>
   <p><button @click="redirectToMiAuth">認証する</button></p>
   <p><button @click="getUser">ユーザ情報を取得する</button></p>
 </template>
