@@ -1,0 +1,12 @@
+services:
+  db:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: mikijs
+      POSTGRES_USER: mikijsuser
+      POSTGRES_PASSWORD: mikijspass
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    ports:
+      - '2183:5432'
