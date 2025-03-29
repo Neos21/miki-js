@@ -1,0 +1,12 @@
+{
+  "typescript.preferences.importModuleSpecifier": "relative",
+  
+  // Formatter は使わない (垂直アラインメントが崩されるため)
+  "editor.formatOnSave": false,
+  
+  // TS Import Sorter
+  "importSorter.generalConfiguration.sortOnBeforeSave": true,
+  "importSorter.importStringConfiguration.quoteMark": "single",
+  "importSorter.importStringConfiguration.tabSize": 2,
+  "importSorter.importStringConfiguration.maximumNumberOfImportExpressionsPerLine.count": 9999
+}

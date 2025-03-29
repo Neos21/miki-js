@@ -1,0 +1,22 @@
+{
+  "name": "miki-js-frontend",
+  "description": "Miki.js Frontend",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "vite preview --host",
+    "dev": "vite --host",
+    "build": "vue-tsc --build && vite build"
+  },
+  "dependencies": {
+    "vue": "3.5.13"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "5.2.3",
+    "@vue/tsconfig": "0.7.0",
+    "typescript": "5.7.3",
+    "vite": "6.2.3",
+    "vue-tsc": "2.2.8"
+  }
+}

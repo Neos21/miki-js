@@ -1,0 +1,26 @@
+{
+  "name": "miki-js-backend",
+  "description": "Miki.js Backend",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./dist/main.js",
+    "build": "nest build",
+    "dev": "nest start --watch"
+  },
+  "dependencies": {
+    "@nestjs/common": "11.0.12",
+    "@nestjs/core": "11.0.12",
+    "@nestjs/platform-express": "11.0.12",
+    "reflect-metadata": "0.2.2",
+    "rxjs": "7.8.2"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "11.0.5",
+    "@nestjs/schematics": "11.0.2",
+    "@types/express": "5.0.1",
+    "@types/node": "22.13.14",
+    "ts-node": "10.9.2",
+    "typescript": "5.8.2"
+  }
+}
