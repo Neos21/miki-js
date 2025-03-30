@@ -15,9 +15,9 @@ import AppBarAvatar from './core/components/app-bar-avatar.vue';
     </v-app-bar>
     
     <!-- permanent で表示したままになる -->
-    <v-navigation-drawer permanent color="blue-darken-2">
+    <v-navigation-drawer permanent color="primary">
       <v-container class="bg-blue-darken-3 text-center">
-        <v-btn link to="/" flat prepend-icon="mdi-home" color="blue-darken-2" class="text-none">Home</v-btn>
+        <v-btn link to="/" flat prepend-icon="mdi-home" class="text-none">Home</v-btn>
       </v-container>
       <v-list density="compact">
         <v-list-item prepend-icon="mdi-account-cog" link to="/admin">Admin</v-list-item>
