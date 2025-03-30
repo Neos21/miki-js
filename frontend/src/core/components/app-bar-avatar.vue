@@ -4,6 +4,7 @@ import { v4 } from 'uuid';
 
 import { useUserStore } from '../../shared/stores/use-user-store';
 import { useInitUser } from '../hooks/use-init-user';
+import { isEmptyObject } from '../../common/helpers/is-empty-object';
 
 const router = useRouter();
 const route = useRoute();
@@ -40,7 +41,7 @@ const onLogin = (): void => {
 </script>
 
 <template>
-  <v-tooltip v-if="userStore.user != null && Object.keys(userStore.user).length !== 0" text="Preferences" location="start">
+  <v-tooltip v-if="!isEmptyObject(userStore.user)" text="Preferences" location="start">
     <template v-slot:activator="{ props }">
       <v-btn icon v-bind="props" link to="/user-preferences">
         <v-img :src="userStore.user.avatarUrl" width="24" height="24" rounded="circle" />

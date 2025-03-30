@@ -1,7 +1,8 @@
 import { camelToSnakeCaseObject, snakeToCamelCaseObject } from '../../common/helpers/convert-case';
+import { isEmptyObject } from '../../common/helpers/is-empty-object';
 import { useUserStore } from '../../shared/stores/use-user-store';
 
-import type { User, UserApi } from "../../common/types/user";
+import type { User, UserApi } from '../../common/types/user';
 import type { Result } from '../../common/types/result';
 
 export const useInitUser = () => {
@@ -10,7 +11,7 @@ export const useInitUser = () => {
   const loadUser = async (): Promise<void> => {
     try {
       const storedUser = userStore.getUser();
-      if(Object.keys(storedUser).length === 0) return console.log('The User Does Not Exist In The User Store (LocalStorage)');
+      if(isEmptyObject(storedUser)) return console.log('The User Does Not Exist In The User Store (LocalStorage)');
       
       const response = await fetch(`/api/users/${storedUser.id}`, { method: 'GET' });  // Throws
       const json: Result<UserApi> = await response.json();  // Throws

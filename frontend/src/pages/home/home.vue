@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <h2>Miki.js Home</h2>
+  <h1>Miki.js Home</h1>
 </template>
 
 <style scoped>

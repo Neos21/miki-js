@@ -10,10 +10,57 @@
 }
 
 :root {
-  --font-family-monospace: "Noto Sans Mono CJK JP", Osaka-mono, "MS Gothic", Menlo, Consolas, Courier, "Courier New", monospace, "Apple Color Emoji", "Noto Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-family-sans-serif: "Hiragino Maru Gothic Pro", "BIZ UDGothic", "Noto Sans JP", "Noto Sans CJK JP", YuGothic, "Yu Gothic", "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, "Helvetica Neue", Helvetica, sans-serif, "Apple Color Emoji", "Noto Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-family-monospace : "Noto Sans Mono CJK JP", Osaka-mono, "MS Gothic", Menlo, Consolas, Courier, "Courier New", monospace, "Apple Color Emoji", "Noto Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 html {
-  font-family: "Hiragino Maru Gothic Pro", "BIZ UDGothic", "Noto Sans JP", "Noto Sans CJK JP", YuGothic, "Yu Gothic", "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, "Helvetica Neue", Helvetica, sans-serif, "Apple Color Emoji", "Noto Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: var(--font-family-sans-serif);
   cursor: default;
+}
+
+code,
+kbd,
+pre,
+samp,
+textarea,
+time,
+var,
+.monospace {
+  font-family: var(--font-family-monospace);
+}
+
+h1 {
+  position: relative;
+  margin: 2rem 0 0;
+  color: #1565c0;
+  font-size: 1.9rem;
+  
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #1976d2, rgba(25, 118, 210, 0));
+  }
+}
+
+h2 {
+  position: relative;
+  margin: 1rem 0 0;
+  color: #424242;
+  font-size: 1.5rem;
+  
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, #616161, rgba(97, 97, 97, 0));
+  }
 }

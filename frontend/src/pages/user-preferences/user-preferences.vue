@@ -9,6 +9,6 @@ const onLogout = (): void => {
 </script>
 
 <template>
-  <h2>ユーザ設定</h2>
+  <h1>ユーザ設定</h1>
   <v-btn class="text-none" @click="onLogout">Logout</v-btn>
 </template>

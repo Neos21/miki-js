@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <h2>Admin</h2>
+  <h1>Admin</h1>
 </template>
 
 <style scoped>
