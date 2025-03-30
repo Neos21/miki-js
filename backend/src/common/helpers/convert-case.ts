@@ -1,5 +1,6 @@
-import { CamelToSnakeCaseObject, SnakeToCamelCaseObject } from '../types/cases';
 import { isObject } from './is-object';
+
+import type { CamelToSnakeCaseObject, SnakeToCamelCaseObject } from '../types/cases';
 
 /** camelCase → snake_case */
 export const camelToSnakeCase = (value: string): string => {
@@ -20,13 +21,13 @@ export const camelToSnakeCaseObject = <T extends object>(object: T): CamelToSnak
         return object.getTime().toString() as CamelToSnakeCaseObject<T>;
       }
       else if(Array.isArray(value)) {
-        accumulator[camelToSnakeCase(camelKey)] = value.map(item => camelToSnakeCaseObject(item));
+        (accumulator as any)[camelToSnakeCase(camelKey)] = value.map(item => camelToSnakeCaseObject(item));
       }
       else if(isObject(value)) {
-        accumulator[camelToSnakeCase(camelKey)] = camelToSnakeCaseObject(value);
+        (accumulator as any)[camelToSnakeCase(camelKey)] = camelToSnakeCaseObject(value);
       }
       else {
-        accumulator[camelToSnakeCase(camelKey)] = value;
+        (accumulator as any)[camelToSnakeCase(camelKey)] = value;
       }
       return accumulator;
     }, {}) as CamelToSnakeCaseObject<T>;
@@ -53,13 +54,13 @@ export const snakeToCamelCaseObject = <T extends object>(object: T): SnakeToCame
         return object.getTime().toString() as SnakeToCamelCaseObject<T>;
       }
       else if(Array.isArray(value)) {
-        accumulator[snakeToCamelCase(snakeKey)] = value.map(item => snakeToCamelCaseObject(item));
+        (accumulator as any)[snakeToCamelCase(snakeKey)] = value.map(item => snakeToCamelCaseObject(item));
       }
       else if(isObject(value)) {
-        accumulator[snakeToCamelCase(snakeKey)] = snakeToCamelCaseObject(value);
+        (accumulator as any)[snakeToCamelCase(snakeKey)] = snakeToCamelCaseObject(value);
       }
       else {
-        accumulator[snakeToCamelCase(snakeKey)] = value;
+        (accumulator as any)[snakeToCamelCase(snakeKey)] = value;
       }
       return accumulator;
     }, {}) as SnakeToCamelCaseObject<T>;

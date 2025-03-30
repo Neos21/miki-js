@@ -3,12 +3,16 @@ import { useRoute, useRouter } from 'vue-router';
 import { v4 } from 'uuid';
 
 import { useUserStore } from '../../shared/stores/use-user-store';
+import { useInitUser } from '../hooks/use-init-user';
 
 const router = useRouter();
 const route = useRoute();
-const userStore = useUserStore();
 
-const misskeyHostUrl = 'https://misskey.neos21.net';  // TODO : バックエンドからもらうようにする
+const userStore = useUserStore();
+const { loadUser, createUser } = useInitUser();
+
+const misskeyHost = 'misskey.neos21.net';  // TODO : バックエンドからもらうようにする
+const misskeyHostUrl = `https://${misskeyHost}`;
 
 const onLogin = (): void => {
   const sessionId = v4();  // 古いモノを使い回すとユーザ情報が取得できないので毎回生成する
@@ -22,18 +26,15 @@ const onLogin = (): void => {
 };
 
 (async () => {
-  // コールバック URL として初期表示された時はユーザ情報を取得し保管する
   await router.isReady();
   if(route.query.session != null) {
+    // コールバック URL として初期表示された時はユーザ情報を取得し保管する
     const sessionId = route.query.session as string;
-    const response = await fetch(`${misskeyHostUrl}/api/miauth/${sessionId}/check`, { method: 'POST' });  // Throws
-    const json = await response.json();  // Throws
-    if(json.ok) {
-      userStore.setSessionId(sessionId);
-      userStore.setToken(json.token);
-      userStore.setUser(json.user);
-      // TODO : LocalStorage の寿命で MiAuth を多用するとアクセストークンが大量発行されてしまうので DB にユーザ情報を持つ必要がある
-    }
+    await createUser(misskeyHost, misskeyHostUrl, sessionId);
+  }
+  else {
+    // LocalStorage・Store からユーザ情報を復元できればログイン済にする
+    await loadUser();
   }
 })();
 </script>

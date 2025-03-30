@@ -4,8 +4,6 @@ import { useUserStore } from '../../shared/stores/use-user-store';
 const userStore = useUserStore();
 
 const onLogout = (): void => {
-  userStore.setSessionId('');
-  userStore.setToken('');
   userStore.setUser({});
 };
 </script>

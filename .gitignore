@@ -3,5 +3,6 @@ Thumbs.db
 
 .env
 
+db/
 dist/
 node_modules/
