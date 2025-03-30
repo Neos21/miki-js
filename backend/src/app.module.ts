@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { configuration } from './core/configs/configuration';
 import { AccessLogMiddleware } from './core/middlewares/access-log.middleware';
+import { UsersController } from './modules/users/users.controller';
 
 @Module({
   imports: [
@@ -13,7 +14,10 @@ import { AccessLogMiddleware } from './core/middlewares/access-log.middleware';
       load: [configuration]
     }),
   ],
-  controllers: [AppController],
+  controllers: [
+    AppController,
+    UsersController
+  ],
   providers: [AppService]
 })
 export class AppModule {

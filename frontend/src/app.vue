@@ -1,24 +1,25 @@
 <script setup lang="ts">
-
-
+import AppBarAvatar from './core/components/app-bar-avatar.vue';
 </script>
 
 <template>
   <v-app>
     <v-app-bar :elevation="0" color="black">
       <template v-slot:prepend>
-        <v-app-bar-nav-icon></v-app-bar-nav-icon>
+        <v-img src="/logo.png" width="34" height="34" class="ml-3" />
       </template>
       <v-app-bar-title>Miki.js</v-app-bar-title>
       <template v-slot:append>
-        <v-btn>Sign-In</v-btn>
+        <AppBarAvatar />
       </template>
     </v-app-bar>
     
     <!-- permanent で表示したままになる -->
     <v-navigation-drawer permanent color="blue-darken-2">
+      <v-container class="bg-blue-darken-3 text-center">
+        <v-btn link to="/" flat prepend-icon="mdi-home" color="blue-darken-2" class="text-none">Home</v-btn>
+      </v-container>
       <v-list density="compact">
-        <v-list-item prepend-icon="mdi-home"        link to="/"     >Home</v-list-item>
         <v-list-item prepend-icon="mdi-account-cog" link to="/admin">Admin</v-list-item>
       </v-list>
     </v-navigation-drawer>

@@ -1,0 +1,16 @@
+<script setup lang="ts">
+import { useUserStore } from '../../shared/stores/use-user-store';
+
+const userStore = useUserStore();
+
+const onLogout = (): void => {
+  userStore.setSessionId('');
+  userStore.setToken('');
+  userStore.setUser({});
+};
+</script>
+
+<template>
+  <h2>ユーザ設定</h2>
+  <v-btn class="text-none" @click="onLogout">Logout</v-btn>
+</template>
