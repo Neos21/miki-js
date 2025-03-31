@@ -5,6 +5,7 @@ import { v4 } from 'uuid';
 import { useUserStore } from '../../shared/stores/use-user-store';
 import { useInitUser } from '../hooks/use-init-user';
 import { isEmptyObject } from '../../common/helpers/is-empty-object';
+import { onMounted } from 'vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -26,7 +27,7 @@ const onLogin = (): void => {
   window.location.href = url;
 };
 
-(async () => {
+onMounted(async () => {
   await router.isReady();
   if(route.query.session != null) {
     // コールバック URL として初期表示された時はユーザ情報を取得し保管する
@@ -37,7 +38,7 @@ const onLogin = (): void => {
     // LocalStorage・Store からユーザ情報を復元でき API で最新版を取れればログイン済にする
     await fetchUser();
   }
-})();
+});
 </script>
 
 <template>

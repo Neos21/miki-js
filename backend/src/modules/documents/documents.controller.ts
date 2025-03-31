@@ -20,7 +20,7 @@ export class DocumentsController {
   
   @Get('*path')
   public async getDocument(@Req() req: Request, @Res() res: Response): Promise<Response<Result<Document>>> {
-    const fullPath = decodeURIComponent(req.url.replace('/api/documents/', ''));
+    const fullPath = decodeURIComponent(req.url.replace(/^\/api\/documents\//, ''));
     const result: Result<Document> = await this.documentsService.getDocumentByFullPath(fullPath);
     if(result.error != null) return res.status(result.code!).json(result);
     

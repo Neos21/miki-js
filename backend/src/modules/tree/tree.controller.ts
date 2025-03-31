@@ -1,8 +1,8 @@
 import { Response } from 'express';
 
-import { Controller, Get, HttpStatus, Res } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Query, Res } from '@nestjs/common';
 
-import { Tree } from '../../common/types/tree';
+import { TreeItem } from '../../common/types/tree-item';
 import { Result } from '../../common/types/result';
 import { TreeService } from './tree.service';
 
@@ -11,8 +11,8 @@ export class TreeController {
   constructor(private readonly treeService: TreeService) { }
   
   @Get('')
-  public async getRootTree(@Res() res: Response): Promise<Response<Result<Tree>>> {
-    const result: Result<Tree> = await this.treeService.getRootTree();
+  public async getRootTree(@Query('parent_document_id') parentDocumentId: string | undefined, @Res() res: Response): Promise<Response<Result<Array<TreeItem>>>> {
+    const result: Result<Array<TreeItem>> = await this.treeService.getTree(parentDocumentId);
     if(result.error != null) return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(result);
     
     return res.status(HttpStatus.OK).json(result);

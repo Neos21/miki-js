@@ -37,6 +37,9 @@ const onSave = async () => {
     documentToSave.title         = title.value;
     documentToSave.content       = getMarkdown();
     documentToSave.updatedUserId = userStore.user.id;
+    delete documentToSave.createdAt;
+    delete documentToSave.createdUserId;
+    delete documentToSave.updatedAt;
     
     const response = await fetch(`/api/documents/${documentToSave.id}`, {
       method: 'PUT',

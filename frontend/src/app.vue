@@ -4,13 +4,15 @@ import { useDisplay } from 'vuetify';
 
 import AppBarAvatar from './core/components/app-bar-avatar.vue';
 import DocumentTree from './core/components/document-tree.vue';
+import AppBarNewButton from './core/components/app-bar-new-button.vue';
+import AppBarEditButton from './core/components/app-bar-edit-button.vue';
 
 const display = useDisplay();
 
 const isDrawerOpened = ref<boolean>(false);
 
 onMounted(() => {
-  if(display.xs) isDrawerOpened.value = true;  // 広い時は開いておく
+  if(display.xs) isDrawerOpened.value = true;  // 画面幅が広い時は表示する
 });
 </script>
 
@@ -18,11 +20,13 @@ onMounted(() => {
   <v-app>
     <v-app-bar :elevation="0" color="black">
       <template v-slot:prepend>
-        <v-img src="/logo.png" width="34" height="34" class="ml-3" />
+        <RouterLink to="/"><v-img src="/logo.png" width="34" height="34" class="ml-3" /></RouterLink>
         <v-app-bar-nav-icon class="ml-3" v-if="$vuetify.display.xs" @click.stop="isDrawerOpened = !isDrawerOpened"></v-app-bar-nav-icon>
       </template>
-      <v-app-bar-title :class="$vuetify.display.xs ? 'app-bar-title' : ''">Miki.js</v-app-bar-title>
+      <v-app-bar-title :class="$vuetify.display.xs ? 'app-bar-title' : ''"><RouterLink to="/" class="app-bar-title-text">Miki.js</RouterLink></v-app-bar-title>
       <template v-slot:append>
+        <AppBarEditButton />
+        <AppBarNewButton />
         <AppBarAvatar />
       </template>
     </v-app-bar>
@@ -35,7 +39,6 @@ onMounted(() => {
       <DocumentTree />
       
       <v-list density="compact">
-        <v-list-item prepend-icon="mdi-plus-thick" link to="/new-root-document">ドキュメントを作成</v-list-item>
         <v-list-item prepend-icon="mdi-account-cog" link to="/admin">Admin</v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -51,6 +54,11 @@ onMounted(() => {
 <style scoped>
 .app-bar-title {
   margin-inline-start: 12px;
+}
+
+.app-bar-title-text {
+  color: inherit;
+  text-decoration: none;
 }
 
 .main {
