@@ -6,7 +6,7 @@ import { useUserStore } from '../../shared/stores/use-user-store';
 export const useInitUser = () => {
   const userStore = useUserStore();
   
-  const loadUser = async (): Promise<void> => {
+  const fetchUser = async (): Promise<void> => {
     try {
       const storedUser = userStore.getUser();
       if(isEmptyObject(storedUser)) return console.log('The User Does Not Exist In The User Store (LocalStorage)');
@@ -15,10 +15,10 @@ export const useInitUser = () => {
       const json: Result<User> = await response.json();
       if(json.error != null) return console.warn('Something Wrong', json);
       userStore.setUser(json.result);
-      console.log('User Loaded', json);
+      console.log('User Fetched', json);
     }
     catch(error) {
-      console.error('Failed To Load User', error);
+      console.error('Failed To Fetch User', error);
     }
   }
   
@@ -55,7 +55,7 @@ export const useInitUser = () => {
   };
   
   return {
-    loadUser,
+    fetchUser,
     createUser
   };
 };

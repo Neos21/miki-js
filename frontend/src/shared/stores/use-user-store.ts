@@ -10,13 +10,13 @@ export const useUserStore = defineStore('user', {
   actions: {
     getUser(): {[key: string]: any} {
       if(isEmptyObject(this.user)) {
-        const user = window.localStorage.getItem('user');
         try {
+          const user = window.localStorage.getItem('user');
           const parsedUser = user == null ? {} : JSON.parse(user);
           this.user = parsedUser;
         }
         catch(error) {
-          console.error('Failed To Parse User From LocalStorage');
+          console.error('Failed To Parse User From LocalStorage', error);
           this.user = {};
         }
       }
@@ -24,7 +24,13 @@ export const useUserStore = defineStore('user', {
     },
     setUser(user: User): void {
       this.user = user;
-      window.localStorage.setItem('user', JSON.stringify(user));
-    },
+      try {
+        const stringifiedUser = JSON.stringify(user);
+        window.localStorage.setItem('user', stringifiedUser);
+      }
+      catch(error) {
+        console.error('Failed To Stringify User', error);
+      }
+    }
   }
 });

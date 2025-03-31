@@ -10,7 +10,7 @@ const router = useRouter();
 const route = useRoute();
 
 const userStore = useUserStore();
-const { loadUser, createUser } = useInitUser();
+const { fetchUser, createUser } = useInitUser();
 
 const misskeyHost = 'misskey.neos21.net';  // TODO : バックエンドからもらうようにする
 const misskeyHostUrl = `https://${misskeyHost}`;
@@ -34,8 +34,8 @@ const onLogin = (): void => {
     await createUser(misskeyHost, misskeyHostUrl, sessionId);
   }
   else {
-    // LocalStorage・Store からユーザ情報を復元できればログイン済にする
-    await loadUser();
+    // LocalStorage・Store からユーザ情報を復元でき API で最新版を取れればログイン済にする
+    await fetchUser();
   }
 })();
 </script>

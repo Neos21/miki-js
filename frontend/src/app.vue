@@ -30,15 +30,19 @@ import DocumentTree from './core/components/document-tree.vue';
     </v-navigation-drawer>
     
     <v-main height="100vh">
-      <v-container class="main-container">
+      <main class="main">
         <RouterView />
-      </v-container>
+      </main>
     </v-main>
   </v-app>
 </template>
 
 <style scoped>
-.main-container > :first-child {
+.main {
+  padding: 16px;
+}
+
+.main > :first-child {
   margin-top: 0;
 }
 </style>
