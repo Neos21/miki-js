@@ -6,6 +6,7 @@ import { useUserStore } from '../../shared/stores/use-user-store';
 import { useTreeStore } from '../../shared/stores/use-tree-store';
 import { Document } from '../../common/types/document';
 import { Result } from '../../common/types/result';
+import { titleRules } from '../../shared/helpers/validator-title-rules';
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -19,15 +20,6 @@ const uriRules = [
   (value: string): boolean | string => {
     if(value.trim() === '') return '空値にはできません';
     if(!/^[a-z0-9-]+$/.test(value)) return '半角英数字とハイフンのみ利用できます';
-    const maxLength = 50;  // NOTE : テキトーに設定しておく
-    if(value.length > maxLength) return `${maxLength} 文字以内で入力してください`;
-    return true;
-  }
-];
-const titleRules = [
-  (value: string): boolean | string => {
-    if(value.trim() === '') return '空値にはできません';
-    if(/^\s+|\s+$/g.test(value)) return '先頭や末尾には空白文字を入力できません';
     const maxLength = 50;  // NOTE : テキトーに設定しておく
     if(value.length > maxLength) return `${maxLength} 文字以内で入力してください`;
     return true;
@@ -52,7 +44,6 @@ const onSubmit = async (): Promise<void> => {
       body: JSON.stringify(newDocument)
     });
     const json: Result<Document> = await response.json();
-    // TODO : バックエンドで名前の重複チェックを行う
     if(json.error != null) {
       console.error('Something Wrong', json);
       return alert(`Error : ${json.error}`);

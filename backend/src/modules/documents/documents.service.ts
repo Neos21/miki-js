@@ -56,6 +56,24 @@ export class DocumentsService {
     }
   }
   
+  public async putDocumentById(id: string, document: Document): Promise<Result<Document>> {
+    try {
+      const targetDocument = await this.documentsRepository.findOneBy({ id });
+      if(targetDocument == null) return { error: 'The Document ID Does Not Exist', code: HttpStatus.BAD_REQUEST };
+      
+      // DB のバージョンと同じ値でない場合は競合の恐れがあるため更新しない
+      if(document.version !== targetDocument.version) return { error: 'Version Mimatch', code: HttpStatus.BAD_REQUEST };
+      
+      // バージョンをインクリメントして保存する
+      document.version = document.version + 1;
+      const updatedDocument = await this.documentsRepository.save(document);
+      return { result: updatedDocument };
+    }
+    catch(error) {
+      return { error, code: HttpStatus.INTERNAL_SERVER_ERROR };
+    }
+  }
+  
   private getFullPath(documentEntity: DocumentEntity, documentEntities: Array<DocumentEntity>): string {
     let fullPath = documentEntity.uri;
     let currentDocumentEntity = documentEntity;

@@ -69,8 +69,20 @@ hr {
   margin: 1.5rem 0;
 }
 
+h3,
+h4,
+h5,
+h6,
 p,
 ul,
-pre {
+ol,
+pre,
+blockquote {
   margin: 1rem 0 0;
+}
+
+pre {
+  border: 1px solid #999;
+  border-radius: 4px;
+  padding: .75rem;
 }
