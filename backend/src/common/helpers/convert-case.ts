@@ -1,4 +1,5 @@
 import { CamelToSnakeCaseObject, SnakeToCamelCaseObject } from '../types/cases';
+
 import { isObject } from './is-object';
 
 /** camelCase → snake_case */

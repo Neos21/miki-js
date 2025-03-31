@@ -1,8 +1,8 @@
-import * as express from 'express';
 
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import * as express from 'express';
 
 import { AppModule } from './app.module';
 import { cyan, yellow } from './core/utils/colour-logger';

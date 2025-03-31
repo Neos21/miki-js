@@ -1,13 +1,12 @@
-import { Repository } from 'typeorm';
-
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
+import { snakeToCamelCaseObject } from '../../common/helpers/convert-case';
+import { isEmptyString } from '../../common/helpers/is-empty-string';
 import { Document } from '../../common/types/document';
 import { Result } from '../../common/types/result';
 import { DocumentEntity } from '../../shared/entities/document.entity';
-import { isEmptyString } from '../../common/helpers/is-empty-string';
-import { snakeToCamelCaseObject } from '../../common/helpers/convert-case';
 
 @Injectable()
 export class DocumentsService {

@@ -1,9 +1,9 @@
+import { Controller, Get, HttpStatus, Query, Res } from '@nestjs/common';
 import { Response } from 'express';
 
-import { Controller, Get, HttpStatus, Query, Res } from '@nestjs/common';
-
-import { TreeItem } from '../../common/types/tree-item';
 import { Result } from '../../common/types/result';
+import { TreeItem } from '../../common/types/tree-item';
+
 import { TreeService } from './tree.service';
 
 @Controller('/api/tree')

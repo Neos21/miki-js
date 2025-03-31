@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node ./dist/main.js",
     "build": "nest build",
-    "dev": "nest start --watch"
+    "dev": "nest start --watch",
+    "lint": "eslint --config ./.eslint.config.js ./src/**/*.ts",
+    "eslint": "eslint"
   },
   "dependencies": {
     "@nestjs/common": "11.0.12",
@@ -20,13 +22,18 @@
     "typeorm": "0.3.21"
   },
   "devDependencies": {
+    "@eslint/js": "9.23.0",
     "@nestjs/cli": "11.0.5",
     "@nestjs/schematics": "11.0.2",
     "@types/express": "5.0.1",
     "@types/express-list-endpoints": "6.0.3",
     "@types/node": "22.13.14",
+    "eslint": "9.23.0",
+    "eslint-plugin-import": "2.31.0",
     "express-list-endpoints": "7.1.1",
+    "globals": "16.0.0",
     "ts-node": "10.9.2",
-    "typescript": "5.8.2"
+    "typescript": "5.8.2",
+    "typescript-eslint": "8.28.0"
   }
 }

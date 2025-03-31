@@ -1,9 +1,9 @@
-import { Response } from 'express';
-
 import { Body, Controller, Get, HttpStatus, Param, Post, Res } from '@nestjs/common';
+import { Response } from 'express';
 
 import { Result } from '../../common/types/result';
 import { User } from '../../common/types/user';
+
 import { UsersService } from './users.service';
 
 @Controller('/api/users')
