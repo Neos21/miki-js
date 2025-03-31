@@ -10,5 +10,5 @@ const onLogout = (): void => {
 
 <template>
   <h1>ユーザ設定</h1>
-  <v-btn class="text-none" @click="onLogout">Logout</v-btn>
+  <p><v-btn class="text-none" @click="onLogout">Logout</v-btn></p>
 </template>

@@ -23,7 +23,7 @@ export class UsersService {
   
   public async getUser(id: string): Promise<Result<User>> {
     try {
-      const user: User = await this.usersRepository.findOneByOrFail({ id });  // Throws
+      const user: User = await this.usersRepository.findOneByOrFail({ id });
       return { result: user };
     }
     catch(error) {

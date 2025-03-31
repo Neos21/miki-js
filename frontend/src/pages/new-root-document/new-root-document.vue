@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-import { camelToSnakeCaseObject } from '../../common/helpers/convert-case';
 import { useUserStore } from '../../shared/stores/use-user-store';
+import { useTreeStore } from '../../shared/stores/use-tree-store';
+import { Document } from '../../common/types/document';
+import { Result } from '../../common/types/result';
 
-import type { Document, DocumentApi } from '../../common/types/document';
-import type { Result } from '../../common/types/result';
-
+const router = useRouter();
 const userStore = useUserStore();
+const treeStore = useTreeStore();
 
 const isValid = ref<boolean>(false);
 const uri     = ref<string>('');
@@ -44,20 +46,27 @@ const onSubmit = async (): Promise<void> => {
       createdUserId    : userStore.user.id,
       updatedUserId    : userStore.user.id
     };
-    const newDocumentApi: DocumentApi = camelToSnakeCaseObject(newDocument);
     const response = await fetch('/api/documents', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newDocumentApi)
+      body: JSON.stringify(newDocument)
     });
-    const createdDocumentResult: Result<DocumentApi> = await response.json();
-    if(createdDocumentResult.error != null) return console.error('Failed To Create Root Document', createdDocumentResult);
+    const json: Result<Document> = await response.json();
+    // TODO : バックエンドで名前の重複チェックを行う
+    if(json.error != null) {
+      console.error('Something Wrong', json);
+      return alert(`Error : ${json.error}`);
+    }
+    console.log('Root Document Created', json);
     
-    console.log('Root Document Created', createdDocumentResult);
-    // TODO : 新規作成したページに移動する
+    // ツリーを再読込する
+    await treeStore.fetchRootTree();
+    // 新規作成したページに移動する
+    router.push(`/wiki/${uri.value}`);
   }
   catch(error) {
     console.error('Failed To Create Root Document', error);
+    alert('Error : Failed To Create Root Document');
   }
 };
 </script>

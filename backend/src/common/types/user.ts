@@ -1,5 +1,3 @@
-import type { CamelToSnakeCaseObject } from './cases';
-
 interface MisskeyUser {
   id: string;
   name: string;
@@ -50,5 +48,3 @@ export type User = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
 };
-
-export type UserApi = CamelToSnakeCaseObject<User>;

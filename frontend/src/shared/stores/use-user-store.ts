@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia';
 
 import { isEmptyObject } from '../../common/helpers/is-empty-object';
-
-import type { User } from '../../common/types/user';
+import { User } from '../../common/types/user';
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -12,8 +11,14 @@ export const useUserStore = defineStore('user', {
     getUser(): {[key: string]: any} {
       if(isEmptyObject(this.user)) {
         const user = window.localStorage.getItem('user');
-        const parsedUser = user == null ? {} : JSON.parse(user);  // Throws
-        this.user = parsedUser;
+        try {
+          const parsedUser = user == null ? {} : JSON.parse(user);
+          this.user = parsedUser;
+        }
+        catch(error) {
+          console.error('Failed To Parse User From LocalStorage');
+          this.user = {};
+        }
       }
       return this.user;
     },

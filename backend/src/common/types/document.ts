@@ -1,5 +1,3 @@
-import type { CamelToSnakeCaseObject } from './cases';
-
 export type Document = {
   id?: string;
   uri?: string;
@@ -14,5 +12,3 @@ export type Document = {
   createdAt?: Date | string;
   updatedAt?: Date | string;
 };
-
-export type DocumentApi = CamelToSnakeCaseObject<Document>;

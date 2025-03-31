@@ -1,19 +1,21 @@
 <script setup lang="ts">
-import NestedList from './document-tree-nested-list.vue';
+import { Tree } from '../../common/types/tree';
+import DocumentTreeNestedList from './document-tree-nested-list.vue';
 
 defineProps<{
-  items: { title: string; children?: any[] }[],
-  isRoot: boolean
+  tree: Tree,
+  isRoot: boolean,
+  parentUriPath: string
 }>();
 </script>
 
 <template>
-  <v-list-group v-for="item in items" :key="item.title" :value="item.title" class="list-group">
+  <v-list-group v-for="treeItem in tree" :key="treeItem.title" :value="treeItem.title" class="list-group">
     <template #activator="{ props }">
-      <v-list-item v-if="isRoot" v-bind="props" :title="item.title" class="list-item root-list-item" ></v-list-item>
-      <v-list-item v-else        v-bind="props" :title="item.title" class="list-item child-list-item"></v-list-item>
+      <v-list-item v-if="isRoot" v-bind="props" :title="treeItem.title" :to="`${parentUriPath}/${treeItem.uri}`" class="list-item root-list-item" ></v-list-item>
+      <v-list-item v-else        v-bind="props" :title="treeItem.title" :to="`${parentUriPath}/${treeItem.uri}`" class="list-item child-list-item"></v-list-item>
     </template>
-    <NestedList v-if="item.children?.length" :items="item.children" :isRoot="false" />
+    <DocumentTreeNestedList v-if="treeItem.children != null && treeItem.children.length > 0" :tree="treeItem.children!" :isRoot="false" :parentUriPath="`${parentUriPath}/${treeItem.uri}`" />
   </v-list-group>
 </template>
 

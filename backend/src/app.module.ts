@@ -8,6 +8,8 @@ import { configuration } from './core/configs/configuration';
 import { AccessLogMiddleware } from './core/middlewares/access-log.middleware';
 import { DocumentsController } from './modules/documents/documents.controller';
 import { DocumentsService } from './modules/documents/documents.service';
+import { TreeController } from './modules/tree/tree.controller';
+import { TreeService } from './modules/tree/tree.service';
 import { UsersController } from './modules/users/users.controller';
 import { UsersService } from './modules/users/users.service';
 import { DocumentEntity } from './shared/entities/document.entity';
@@ -43,11 +45,13 @@ import { UserEntity } from './shared/entities/user.entity';
     AppController,
     UsersController,
     DocumentsController,
+    TreeController
   ],
   providers: [
     AppService,
     UsersService,
-    DocumentsService
+    DocumentsService,
+    TreeService
   ]
 })
 export class AppModule {

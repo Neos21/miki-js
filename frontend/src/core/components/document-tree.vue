@@ -1,36 +1,16 @@
 <script setup lang="ts">
-import NestedList from './document-tree-nested-list.vue';
+import { useTreeStore } from '../../shared/stores/use-tree-store';
+import DocumentTreeNestedList from './document-tree-nested-list.vue';
 
-// TODO : API で取ってくる
-const documentStructure = [
-  {
-    title: 'Home',
-    children: [
-      { title: 'About', children: [] },
-      {
-        title: 'Docs',
-        children: [
-          {
-            title: 'Guide',
-            children: [
-              {
-                title: 'Introduction',
-                children: [
-                  { title: 'Getting Started', children: [] }
-                ]
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  { title: 'Hoge', children: [] }
-];
+const treeStore = useTreeStore();
+
+(async () => {
+  await treeStore.fetchRootTree();
+})();
 </script>
 
 <template>
   <v-list density="compact">
-    <NestedList :items="documentStructure" :isRoot="true" />
+    <DocumentTreeNestedList :tree="treeStore.tree" :isRoot="true" parentUriPath="/wiki" />
   </v-list>
 </template>

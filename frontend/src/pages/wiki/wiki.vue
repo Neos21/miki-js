@@ -6,5 +6,5 @@ const route = useRoute();
 
 <template>
   <h1>Wiki Page</h1>
-  <p>Current Path : /{{ route.params.catchAll }}</p>
+  <p>Current Path : /wiki/{{ route.params.catchAll }}</p>
 </template>
