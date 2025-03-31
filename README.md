@@ -58,8 +58,8 @@ $ npm run dev
     - [ ] 管理用ユーザ ID・パスワードを設定する (環境変数注入)
     - [ ] Misskey ホスト URL を指定する
 - 開発体験
-    - Vue に Prettier・ESLint 入れたい。TypeScript Imports を自動ソートしたい
-    - NestJS に Prettier・ESLint 入れたいが、垂直アラインメントを崩してほしくない
+    - [ ] Vue に Prettier・ESLint 入れたい。TypeScript Imports を自動ソートしたい
+    - [ ] NestJS に Prettier・ESLint 入れたいが、垂直アラインメントを崩してほしくない
 
 ### 優先度低
 
