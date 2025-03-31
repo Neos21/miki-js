@@ -5,5 +5,10 @@ import { useUserStore } from '../../shared/stores/use-user-store';
 
 export const loginGuard = (_to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext) => {
   const userStore = useUserStore();
-  isEmptyObject(userStore.user) ? next('/') : next();
+  if(isEmptyObject(userStore.user)) {
+    next('/')
+  }
+  else {
+    next();
+  }
 };

@@ -43,7 +43,7 @@ watch(() => route.path, fetchDocument);
 
 <template>
   <header class="header">{{ currentDocument?.title || '&nbsp;' }}</header>
-  <div v-html="htmlContent" />
+  <div v-html="htmlContent" />  <!-- eslint-disable-line vue/no-v-html -->
   <footer class="footer">Last-Modified : {{ currentDocument?.updatedAt ? epochTimeMsToJstString(currentDocument.updatedAt as string, 'YYYY-MM-DD HH:mm:SS') : '' }} By {{ currentDocument?.updatedUserId }}</footer>
 </template>
 

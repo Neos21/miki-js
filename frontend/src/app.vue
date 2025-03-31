@@ -19,19 +19,19 @@ onMounted(() => {
 <template>
   <v-app>
     <v-app-bar :elevation="0" color="black">
-      <template v-slot:prepend>
+      <template #prepend>
         <RouterLink to="/"><v-img src="/logo.png" width="34" height="34" class="ml-3" /></RouterLink>
-        <v-app-bar-nav-icon class="ml-3" v-if="$vuetify.display.xs" @click.stop="isDrawerOpened = !isDrawerOpened"></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon v-if="$vuetify.display.xs" class="ml-3" @click.stop="isDrawerOpened = !isDrawerOpened"></v-app-bar-nav-icon>
       </template>
       <v-app-bar-title :class="$vuetify.display.xs ? 'app-bar-title' : ''"><RouterLink to="/" class="app-bar-title-text">Miki.js</RouterLink></v-app-bar-title>
-      <template v-slot:append>
+      <template #append>
         <AppBarEditButton />
         <AppBarNewButton />
         <AppBarAvatar />
       </template>
     </v-app-bar>
     
-    <v-navigation-drawer color="primary" :permanent="!$vuetify.display.xs" v-model="isDrawerOpened">
+    <v-navigation-drawer v-model="isDrawerOpened" color="primary" :permanent="!$vuetify.display.xs">
       <v-container class="bg-blue-darken-3 text-center">
         <v-btn link to="/" flat prepend-icon="mdi-home" class="text-none">Home</v-btn>
       </v-container>

@@ -34,7 +34,7 @@ watch(() => route.path, watchCurrentWikiPath);
 
 <template>
   <v-tooltip v-if="!isEmptyObject(userStore.user) && !isEmptyString(currentWikiPath)" text="編集" location="bottom">
-    <template v-slot:activator="{ props }">
+    <template #activator="{ props }">
       <v-btn v-bind="props" icon="mdi-note-edit-outline" @click="onClick"></v-btn>
     </template>
   </v-tooltip>

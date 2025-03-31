@@ -40,7 +40,7 @@ watch(() => route.path, watchCurrentWikiPath);
 
 <template>
   <v-tooltip v-if="!isEmptyObject(userStore.user)" text="新規作成" location="bottom">
-    <template v-slot:activator="{ props }">
+    <template #activator="{ props }">
       <v-btn v-bind="props" icon="mdi-note-plus-outline" @click="onClick"></v-btn>
     </template>
   </v-tooltip>

@@ -10,7 +10,7 @@ export default typeScriptEslint.config([
   {
     extends: [
       eslintJs.configs.recommended,
-      ...typescriptEslint.configs.recommended,
+      ...typeScriptEslint.configs.recommended,
       ...eslintPluginVue.configs['flat/recommended'],
     ],
     files: ['**/*.{ts,vue}'],
@@ -19,12 +19,16 @@ export default typeScriptEslint.config([
       sourceType: 'module',
       globals: globals.browser,
       parserOptions: {
-        parser: typescriptEslint.parser,
-      },
-    },
+        parser: typeScriptEslint.parser
+      }
+    }
+  },
+  {
     rules: {
-      'no-trailing-spaces': 'off'  // 空行のインデントスペースを許可する
-    },
+      'no-trailing-spaces': 'off',  // 空行のインデントスペースを許可する
+      '@typescript-eslint/no-explicit-any': 'off',  // any を許可する
+      'vue/multi-word-component-names': 'off'  // コンポーネント名が単一語でも許可する
+    }
   },
   eslintConfigPrettier
 ]);

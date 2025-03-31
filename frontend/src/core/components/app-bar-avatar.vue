@@ -43,14 +43,14 @@ onMounted(async () => {
 
 <template>
   <v-tooltip v-if="!isEmptyObject(userStore.user)" text="Preferences" location="start">
-    <template v-slot:activator="{ props }">
+    <template #activator="{ props }">
       <v-btn icon v-bind="props" link to="/user-preferences">
         <v-img :src="userStore.user.avatarUrl" width="24" height="24" rounded="circle" />
       </v-btn>
     </template>
   </v-tooltip>
   <v-tooltip v-else text="Login" location="start">
-    <template v-slot:activator="{ props }">
+    <template #activator="{ props }">
       <v-btn icon v-bind="props" @click="onLogin">
         <v-icon>mdi-account-circle</v-icon>
       </v-btn>

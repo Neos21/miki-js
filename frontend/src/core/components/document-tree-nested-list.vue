@@ -44,7 +44,7 @@ const toggleTreeItem = async (treeItem: TreeItem) => {
         <v-btn :icon="treeItem.children == null ? 'mdi-page-last' : treeItem.isOpened ? 'mdi-chevron-down' : 'mdi-chevron-right'" variant="plain" density="compact" color="white" class="list-item-button" @click="toggleTreeItem(treeItem)" />
         <RouterLink :to="`${parentUriPath}/${treeItem.uri}`" class="list-item-link">{{ treeItem.title }}</RouterLink>
       </div>
-      <DocumentTreeNestedList v-if="treeItem.isOpened && treeItem.children != null && treeItem.children.length > 0" :tree="treeItem.children!" :nestLevel="nestLevel + 1" :parentUriPath="`${parentUriPath}/${treeItem.uri}`" />
+      <DocumentTreeNestedList v-if="treeItem.isOpened && treeItem.children != null && treeItem.children.length > 0" :tree="treeItem.children!" :nest-level="nestLevel + 1" :parent-uri-path="`${parentUriPath}/${treeItem.uri}`" />
     </li>
   </ul>
 </template>
