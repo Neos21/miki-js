@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Result } from '../../common/types/result';
 import { TreeItem } from '../../common/types/tree-item';
+
 import DocumentTreeNestedList from './document-tree-nested-list.vue';
 
 defineProps<{
@@ -34,7 +35,7 @@ const toggleTreeItem = async (treeItem: TreeItem) => {
   catch(error) {
     console.error('Failed To Fetch Child Tree', error);
   }
-}
+};
 </script>
 
 <template>

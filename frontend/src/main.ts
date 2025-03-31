@@ -2,8 +2,9 @@ import '@mdi/font/css/materialdesignicons.css';
 import 'vuetify/styles/main.css';
 import './styles.css';
 
-import { createPinia } from 'pinia';
 import { createApp } from 'vue';
+
+import { createPinia } from 'pinia';
 import { createVuetify } from 'vuetify';
 import { md2 } from 'vuetify/blueprints';
 import * as components from 'vuetify/components';

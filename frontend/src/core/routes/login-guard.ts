@@ -6,7 +6,7 @@ import { useUserStore } from '../../shared/stores/use-user-store';
 export const loginGuard = (_to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext) => {
   const userStore = useUserStore();
   if(isEmptyObject(userStore.user)) {
-    next('/')
+    next('/');
   }
   else {
     next();

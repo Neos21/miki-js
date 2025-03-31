@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { useRoute, useRouter } from 'vue-router';
-import { v4 } from 'uuid';
+import { onMounted } from 'vue';
 
+import { v4 } from 'uuid';
+import { useRoute, useRouter } from 'vue-router';
+
+import { isEmptyObject } from '../../common/helpers/is-empty-object';
 import { useUserStore } from '../../shared/stores/use-user-store';
 import { useInitUser } from '../hooks/use-init-user';
-import { isEmptyObject } from '../../common/helpers/is-empty-object';
-import { onMounted } from 'vue';
 
 const router = useRouter();
 const route = useRoute();

@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
+
 import { useRoute, useRouter } from 'vue-router';
 
-import { useUserStore } from '../../shared/stores/use-user-store';
-import { useTreeStore } from '../../shared/stores/use-tree-store';
+import { isEmptyString } from '../../common/helpers/is-empty-string';
 import { Document } from '../../common/types/document';
 import { Result } from '../../common/types/result';
 import { titleRules } from '../../shared/helpers/validator-title-rules';
-import { isEmptyString } from '../../common/helpers/is-empty-string';
+import { useTreeStore } from '../../shared/stores/use-tree-store';
+import { useUserStore } from '../../shared/stores/use-user-store';
 
 const route  = useRoute();
 const router = useRouter();
@@ -103,8 +104,8 @@ onMounted(async () => {
   <h1>ドキュメントを作成</h1>
   <p>配下に作成 : <code>/wiki/{{ parentPath }}</code></p>
   <v-form v-model="isValid">
-    <p><v-text-field v-model="uri"   :rules="uriRules"   label="URI"   required></v-text-field></p>
-    <p><v-text-field v-model="title" :rules="titleRules" label="Title" required></v-text-field></p>
+    <p><v-text-field v-model="uri"   :rules="uriRules"   label="URI"   required /></p>
+    <p><v-text-field v-model="title" :rules="titleRules" label="Title" required /></p>
     <p><v-btn :disabled="!isValid" @click="onSubmit">作成</v-btn></p>
   </v-form>
 </template>

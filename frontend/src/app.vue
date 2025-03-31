@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
+
 import { useDisplay } from 'vuetify';
 
 import AppBarAvatar from './core/components/app-bar-avatar.vue';
-import DocumentTree from './core/components/document-tree.vue';
-import AppBarNewButton from './core/components/app-bar-new-button.vue';
 import AppBarEditButton from './core/components/app-bar-edit-button.vue';
+import AppBarNewButton from './core/components/app-bar-new-button.vue';
+import DocumentTree from './core/components/document-tree.vue';
 
 const display = useDisplay();
 
@@ -21,7 +22,7 @@ onMounted(() => {
     <v-app-bar :elevation="0" color="black">
       <template #prepend>
         <RouterLink to="/"><v-img src="/logo.png" width="34" height="34" class="ml-3" /></RouterLink>
-        <v-app-bar-nav-icon v-if="$vuetify.display.xs" class="ml-3" @click.stop="isDrawerOpened = !isDrawerOpened"></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon v-if="$vuetify.display.xs" class="ml-3" @click.stop="isDrawerOpened = !isDrawerOpened" />
       </template>
       <v-app-bar-title :class="$vuetify.display.xs ? 'app-bar-title' : ''"><RouterLink to="/" class="app-bar-title-text">Miki.js</RouterLink></v-app-bar-title>
       <template #append>

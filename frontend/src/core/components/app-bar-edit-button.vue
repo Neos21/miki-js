@@ -1,10 +1,11 @@
 <script setup lang="ts">
+import { onMounted, ref, watch } from 'vue';
+
 import { useRoute, useRouter } from 'vue-router';
 
-import { useUserStore } from '../../shared/stores/use-user-store';
 import { isEmptyObject } from '../../common/helpers/is-empty-object';
-import { onMounted, ref, watch } from 'vue';
 import { isEmptyString } from '../../common/helpers/is-empty-string';
+import { useUserStore } from '../../shared/stores/use-user-store';
 
 const router = useRouter();
 const route = useRoute();
@@ -35,7 +36,7 @@ watch(() => route.path, watchCurrentWikiPath);
 <template>
   <v-tooltip v-if="!isEmptyObject(userStore.user) && !isEmptyString(currentWikiPath)" text="編集" location="bottom">
     <template #activator="{ props }">
-      <v-btn v-bind="props" icon="mdi-note-edit-outline" @click="onClick"></v-btn>
+      <v-btn v-bind="props" icon="mdi-note-edit-outline" @click="onClick" />
     </template>
   </v-tooltip>
 </template>

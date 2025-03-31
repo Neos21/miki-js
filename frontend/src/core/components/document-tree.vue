@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
+
 import { useTreeStore } from '../../shared/stores/use-tree-store';
+
 import DocumentTreeNestedList from './document-tree-nested-list.vue';
 
 const treeStore = useTreeStore();

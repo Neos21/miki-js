@@ -3,10 +3,11 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Admin from '../../pages/admin/admin.vue';
 import Edit from '../../pages/edit/edit.vue';
 import Home from '../../pages/home/home.vue';
+import New from '../../pages/new/new.vue';
 import UserPreferences from '../../pages/user-preferences/user-preferences.vue';
 import Wiki from '../../pages/wiki/wiki.vue';
+
 import { loginGuard } from './login-guard';
-import New from '../../pages/new/new.vue';
 
 const routes = [
   { path: '/'                  , component: Home                                       },

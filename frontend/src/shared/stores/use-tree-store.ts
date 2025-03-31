@@ -17,7 +17,7 @@ export const useTreeStore = defineStore('tree', {
         const rootTree = json.result.map(treeItem => {
           treeItem.isOpened = false;
           return treeItem;
-        })
+        });
         this.tree = rootTree;  // NOTE : 今までキャッシュしていた子階層分が全部消える
       }
       catch(error) {

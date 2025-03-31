@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue';
+
 import { useRoute, useRouter } from 'vue-router';
-import { renderMarkdown } from '../../shared/helpers/render-markdown';
-import { Result } from '../../common/types/result';
-import { Document } from '../../common/types/document';
+
 import { epochTimeMsToJstString } from '../../common/helpers/convert-date-to-jst';
+import { Document } from '../../common/types/document';
+import { Result } from '../../common/types/result';
+import { renderMarkdown } from '../../shared/helpers/render-markdown';
 
 const route  = useRoute();
 const router = useRouter();

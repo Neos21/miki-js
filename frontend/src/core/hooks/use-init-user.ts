@@ -20,7 +20,7 @@ export const useInitUser = () => {
     catch(error) {
       console.error('Failed To Fetch User', error);
     }
-  }
+  };
   
   const createUser = async (misskeyHost: string, misskeyHostUrl: string, sessionId: string): Promise<void> => {
     try {
