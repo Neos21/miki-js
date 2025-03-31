@@ -1,7 +1,7 @@
-import { Repository } from 'typeorm';
 
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 import { Result } from '../../common/types/result';
 import { User } from '../../common/types/user';

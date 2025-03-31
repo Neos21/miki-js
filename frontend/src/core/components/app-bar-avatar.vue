@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { useRoute, useRouter } from 'vue-router';
-import { v4 } from 'uuid';
+import { onMounted } from 'vue';
 
+import { v4 } from 'uuid';
+import { useRoute, useRouter } from 'vue-router';
+
+import { isEmptyObject } from '../../common/helpers/is-empty-object';
 import { useUserStore } from '../../shared/stores/use-user-store';
 import { useInitUser } from '../hooks/use-init-user';
-import { isEmptyObject } from '../../common/helpers/is-empty-object';
 
 const router = useRouter();
 const route = useRoute();
@@ -26,7 +28,7 @@ const onLogin = (): void => {
   window.location.href = url;
 };
 
-(async () => {
+onMounted(async () => {
   await router.isReady();
   if(route.query.session != null) {
     // コールバック URL として初期表示された時はユーザ情報を取得し保管する
@@ -37,19 +39,19 @@ const onLogin = (): void => {
     // LocalStorage・Store からユーザ情報を復元でき API で最新版を取れればログイン済にする
     await fetchUser();
   }
-})();
+});
 </script>
 
 <template>
   <v-tooltip v-if="!isEmptyObject(userStore.user)" text="Preferences" location="start">
-    <template v-slot:activator="{ props }">
+    <template #activator="{ props }">
       <v-btn icon v-bind="props" link to="/user-preferences">
         <v-img :src="userStore.user.avatarUrl" width="24" height="24" rounded="circle" />
       </v-btn>
     </template>
   </v-tooltip>
   <v-tooltip v-else text="Login" location="start">
-    <template v-slot:activator="{ props }">
+    <template #activator="{ props }">
       <v-btn icon v-bind="props" @click="onLogin">
         <v-icon>mdi-account-circle</v-icon>
       </v-btn>

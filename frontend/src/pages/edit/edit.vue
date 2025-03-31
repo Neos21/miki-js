@@ -1,18 +1,19 @@
 <script setup lang="ts">
+import { onBeforeUnmount, onMounted, ref } from 'vue';
+
 import { exampleSetup } from 'prosemirror-example-setup';
 import { defaultMarkdownSerializer, schema } from 'prosemirror-markdown';
 import { DOMParser, Node } from 'prosemirror-model';
 import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
-import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import { Document } from '../../common/types/document';
 import { Result } from '../../common/types/result';
 import { renderMarkdown } from '../../shared/helpers/render-markdown';
 import { titleRules } from '../../shared/helpers/validator-title-rules';
-import { useUserStore } from '../../shared/stores/use-user-store';
 import { useTreeStore } from '../../shared/stores/use-tree-store';
+import { useUserStore } from '../../shared/stores/use-user-store';
 
 const route  = useRoute();
 const router = useRouter();
@@ -37,6 +38,9 @@ const onSave = async () => {
     documentToSave.title         = title.value;
     documentToSave.content       = getMarkdown();
     documentToSave.updatedUserId = userStore.user.id;
+    delete documentToSave.createdAt;
+    delete documentToSave.createdUserId;
+    delete documentToSave.updatedAt;
     
     const response = await fetch(`/api/documents/${documentToSave.id}`, {
       method: 'PUT',
@@ -117,10 +121,10 @@ onBeforeUnmount(() => {
 
 <template>
   <v-form v-model="isValid" class="header-form">
-    <v-text-field v-model="title" :rules="titleRules" label="Title" required></v-text-field>
+    <v-text-field v-model="title" :rules="titleRules" label="Title" required />
     <v-btn :disabled="!isValid" @click="onSave">保存</v-btn>
   </v-form>
-  <div ref="editor" class="editor" spellcheck="false"></div>
+  <div ref="editor" class="editor" spellcheck="false" />
 </template>
 
 <style scoped>

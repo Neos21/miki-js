@@ -1,9 +1,9 @@
-import { Request, Response } from 'express';
-
 import { Body, Controller, Get, HttpStatus, Param, Post, Put, Req, Res } from '@nestjs/common';
+import { Request, Response } from 'express';
 
 import { Document } from '../../common/types/document';
 import { Result } from '../../common/types/result';
+
 import { DocumentsService } from './documents.service';
 
 @Controller('/api/documents')
@@ -20,7 +20,7 @@ export class DocumentsController {
   
   @Get('*path')
   public async getDocument(@Req() req: Request, @Res() res: Response): Promise<Response<Result<Document>>> {
-    const fullPath = decodeURIComponent(req.url.replace('/api/documents/', ''));
+    const fullPath = decodeURIComponent(req.url.replace(/^\/api\/documents\//, ''));
     const result: Result<Document> = await this.documentsService.getDocumentByFullPath(fullPath);
     if(result.error != null) return res.status(result.code!).json(result);
     

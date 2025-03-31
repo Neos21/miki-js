@@ -30,10 +30,10 @@ export class DocumentEntity {
   @Column({ name: 'updated_user_id' })
   public updatedUserId: string;
   
-  @CreateDateColumn({ name: 'created_at' })
+  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   public readonly createdAt: Date;
   
-  @UpdateDateColumn({ name: 'updated_at' })
+  @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
   public readonly updatedAt: Date;
   
   constructor(partial: Partial<DocumentEntity>) { Object.assign(this, partial); }

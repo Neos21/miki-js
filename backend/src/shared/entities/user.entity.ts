@@ -26,10 +26,10 @@ export class UserEntity {
   @Column({ name: 'misskey_user', type: 'json' })
   public misskeyUser: any;
   
-  @CreateDateColumn({ name: 'created_at' })
+  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   public readonly createdAt: Date;
   
-  @UpdateDateColumn({ name: 'updated_at' })
+  @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
   public readonly updatedAt: Date;
   
   constructor(partial: Partial<UserEntity>) { Object.assign(this, partial); }
