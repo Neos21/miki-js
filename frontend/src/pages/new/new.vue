@@ -85,7 +85,7 @@ onMounted(async () => {
     const response = await fetch(`/api/documents/${parentPath.value}`, { method: 'GET' });
     const json: Result<Document> = await response.json();
     if(json.error != null) {
-      console.warn('Something Wrong', json);
+      console.error('Something Wrong', json);
       router.push('/');
       return;
     }

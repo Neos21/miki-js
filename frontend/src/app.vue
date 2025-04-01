@@ -38,6 +38,18 @@ onMounted(() => {
       </v-container>
       
       <DocumentTree />
+      
+      <v-list density="compact">
+        <v-list-item prepend-icon="mdi-plus-thick" link to="/new">ドキュメントを作成</v-list-item>
+      </v-list>
+      
+      <p class="text-center mt-10" style="opacity: .8;">
+        <v-tooltip text="管理用エリア" location="top">
+          <template #activator="{ props }">
+            <v-btn v-bind="props" icon="mdi-account-cog" size="x-small" color="grey-darken-1" to="/admin" />
+          </template>
+        </v-tooltip>
+      </p>
     </v-navigation-drawer>
     
     <v-main height="100vh">

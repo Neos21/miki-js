@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 
-import * as bcryptjs from 'bcryptjs';
 import { useRoute, useRouter } from 'vue-router';
 
 import { isEmptyString } from '../../../common/helpers/is-empty-string';
+import { Result } from '../../../common/types/result';
 import { User } from '../../../common/types/user';
 import { passwordRules } from '../../../shared/helpers/validator-user-password-rules';
 import { useUserStore } from '../../../shared/stores/use-user-store';
@@ -24,37 +24,41 @@ const password = ref<string>('');
 
 const userStore = useUserStore();
 
-const onSubmit = async (): Promise<void> => {
+const createOrUpdateUser = async (inputPassword?: string): Promise<void> => {
   try {
-    const salt = await bcryptjs.genSalt(10);  // TODO : やっぱやめる・バックエンドでやろう
-    const passwordHash = await bcryptjs.hash(password.value, salt);
-    
     const user: User = {
       id                 : `@${misskeyUser.value!.user.username}@${signup.value!.misskeyHost}`,
       misskeyUserName    : misskeyUser.value!.user.username,
       misskeyHost        : signup.value!.misskeyHost,
       misskeyHostProtocol: signup.value!.misskeyHostProtocol,
-      passwordHash       : passwordHash,
       name               : misskeyUser.value!.user.username,
       avatarUrl          : misskeyUser.value!.user.avatarUrl,
       sessionId          : sessionId.value!,
       token              : misskeyUser.value!.token,
       misskeyUser        : misskeyUser.value!.user
     };
-    const response = await fetch('/api/users', {
+    
+    // 生データをココに持たせておきバックエンドでハッシュ化する
+    if(!isEmptyString(inputPassword)) user.passwordHash = inputPassword;
+    
+    const response = await fetch('/api/users', {  // バックエンドでは Insert ではなく Save で保存している
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(user)
     });
     const json = await response.json();
-    console.log('User Created', json);
+    console.log('User Created Or Updated', json);
     
     userStore.setUser(user);
     router.push('/');
   }
   catch(error) {
-    console.error('Failed To Create User', error);  // TODO : エラー表示
+    console.error('Failed To Create Or Update User', error);  // TODO : エラー表示
   }
+};
+
+const onSubmit = async (): Promise<void> => {
+  await createOrUpdateUser(password.value);
 };
 
 const getSignup = (): Signup | null => {
@@ -78,13 +82,31 @@ const fetchMisskeyUser = async (misskeyHostProtocol: string, misskeyHost: string
     const response = await fetch(`${misskeyHostProtocol}${misskeyHost}/api/miauth/${sessionId}/check`, { method: 'POST' });
     const json = await response.json();
     if(!json.ok) {
-      console.warn('Something Wrong With Check MiAuth', json);
+      console.error('Something Wrong With Check MiAuth', json);
       return null;
     }
     return json;
   }
   catch(error) {
     console.error('Failed To Check MiAuth', error);
+    return null;
+  }
+};
+
+const fetchUser = async (userName: string, misskeyHost: string): Promise<User | null> => {
+  try {
+    const id = `@${userName}@${misskeyHost}`;
+    const response = await fetch(`/api/users/${id}`, { method: 'GET' });
+    const json: Result<User> = await response.json();
+    if(json.error != null) {
+      console.log('Maybe User Not Found', json);
+      return null;
+    }
+    console.log('The User Is Already Registered', json);
+    return json.result;
+  }
+  catch(error) {
+    console.error('Failed To Fetch User', error);
     return null;
   }
 };
@@ -117,12 +139,20 @@ onMounted(async () => {
     return;
   }
   
-  // TODO : アカウント作成済みの人が再度 MiAuth を通った場合を考慮して、ココで DB にユーザ情報が存在するかチェックする・存在すれば一部上書きして更新・ログインさせる
-  
+  // ココまででユーザ登録に使用するデータが出揃ったので控えておく
   sessionId.value   = querySessionId;
   signup.value      = loadedSignup;
   misskeyUser.value = fetchedMisskeyUser;
-  state.value       = 'SUCCEEDED';
+  
+  const fetchedUser = await fetchUser(fetchedMisskeyUser.user.username, loadedSignup.misskeyHost);
+  if(fetchedUser != null) {
+    // アカウント作成済みの人が再度 MiAuth を通った場合 : パスワード入力はスキップして DB を上書きしログインさせる
+    console.log('The User Is Already Registered. Update The User', fetchedUser);
+    return await createOrUpdateUser();
+  }
+  
+  // パスワード入力欄を表示する
+  state.value = 'SUCCEEDED';
 });
 </script>
 
@@ -134,6 +164,7 @@ onMounted(async () => {
   <template v-else-if="state === 'SUCCEEDED'">
     <p>MiAuth でアカウント情報が取得できました。次回ログイン用にパスワードを作成してください。</p>
     <v-form v-model="isValid">
+      <p>ユーザ ID : @{{ misskeyUser!.user.username }}@{{ signup?.misskeyHost }}</p>
       <p><v-text-field v-model="password" :rules="passwordRules" label="パスワード" required /></p>
       <p><v-btn :disabled="!isValid" @click="onSubmit">登録</v-btn></p>
     </v-form>

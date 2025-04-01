@@ -13,7 +13,7 @@ export const useInitUser = () => {
       
       const response = await fetch(`/api/users/${storedUser.id}`, { method: 'GET' });
       const json: Result<User> = await response.json();
-      if(json.error != null) return console.warn('Something Wrong', json);
+      if(json.error != null) return console.error('Something Wrong', json);
       userStore.setUser(json.result);
       console.log('User Fetched', json);
     }

@@ -16,6 +16,8 @@ import { AdminMisskeyHostsController } from './modules/admin/misskey-hosts/admin
 import { AdminMisskeyHostsService } from './modules/admin/misskey-hosts/admin-misskey-hosts.service';
 import { DocumentsController } from './modules/documents/documents.controller';
 import { DocumentsService } from './modules/documents/documents.service';
+import { LoginController } from './modules/login/login.controller';
+import { LoginService } from './modules/login/login.service';
 import { MisskeyHostsController } from './modules/misskey-hosts/misskey-hosts.controller';
 import { MisskeyHostsService } from './modules/misskey-hosts/misskey-hosts.service';
 import { TreeController } from './modules/tree/tree.controller';
@@ -69,6 +71,7 @@ import { UserEntity } from './shared/entities/user.entity';
   controllers: [
     AppController,
     UsersController,
+    LoginController,
     DocumentsController,
     TreeController,
     MisskeyHostsController,
@@ -79,6 +82,7 @@ import { UserEntity } from './shared/entities/user.entity';
   providers: [
     AppService,
     UsersService,
+    LoginService,
     DocumentsService,
     TreeService,
     MisskeyHostsService,

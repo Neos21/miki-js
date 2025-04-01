@@ -20,9 +20,9 @@ const toggleTreeItem = async (treeItem: TreeItem): Promise<void> => {
   if(treeItem.children.length > 0) return;
   
   try {
-    const response = await fetch(`/api/tree?parent_document_id=${treeItem.id}`, { method: 'GET' });
+    const response = await fetch(`/api/tree?parentDocumentId=${treeItem.id}`, { method: 'GET' });
     const json: Result<Array<TreeItem>> = await response.json();
-    if(json.error != null) return console.warn('Something Wrong', json);
+    if(json.error != null) return console.error('Something Wrong', json);
     
     const children = json.result;
     if(children == null || children.length === 0) {

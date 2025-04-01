@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
+import Admin from '../../pages/admin/admin.vue';
+import AdminHome from '../../pages/admin/home/admin-home.vue';
 import AdminLogin from '../../pages/admin/login/admin-login.vue';
 import Edit from '../../pages/edit/edit.vue';
 import Home from '../../pages/home/home.vue';
@@ -10,7 +12,9 @@ import Signup from '../../pages/signup/signup.vue';
 import UserPreferences from '../../pages/user-preferences/user-preferences.vue';
 import Wiki from '../../pages/wiki/wiki.vue';
 
+import { adminGuard } from './admin-guard';
 import { loginGuard } from './login-guard';
+
 
 const routes = [
   { path: '/'                  , component: Home                                       },
@@ -24,7 +28,9 @@ const routes = [
   { path: '/edit'              , redirect : '/'                                        },
   { path: '/edit/:catchAll(.*)', component: Edit                                       },
   { path: '/user-preferences'  , component: UserPreferences, beforeEnter: [loginGuard] },
-  { path: '/admin/login'       , component: AdminLogin                                 }
+  { path: '/admin'             , component: Admin                                      },
+  { path: '/admin/login'       , component: AdminLogin                                 },
+  { path: '/admin/home'        , component: AdminHome      , beforeEnter: [adminGuard] }
 ];
 
 export const router = createRouter({
