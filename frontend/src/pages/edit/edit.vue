@@ -11,7 +11,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { Document } from '../../common/types/document';
 import { Result } from '../../common/types/result';
 import { renderMarkdown } from '../../shared/helpers/render-markdown';
-import { titleRules } from '../../shared/helpers/validator-title-rules';
+import { titleRules } from '../../shared/helpers/validator-document-title-rules';
 import { useTreeStore } from '../../shared/stores/use-tree-store';
 import { useUserStore } from '../../shared/stores/use-user-store';
 
@@ -33,7 +33,6 @@ const onSave = async () => {
   const getMarkdown = () => editorView == null ? '' : defaultMarkdownSerializer.serialize(editorView.state.doc);
   
   try {
-    // 保存する Document オブジェクトを作る
     const documentToSave = targetDocument.value!;
     documentToSave.title         = title.value;
     documentToSave.content       = getMarkdown();
@@ -50,7 +49,7 @@ const onSave = async () => {
     const json = await response.json();
     if(json.error != null) {
       console.error('Something Wrong', json);
-      return alert(`Error : ${json.error}`);
+      return alert(`Error : ${json.error}`);  // TODO : エラー表示
     }
     console.log('Document Saved', json);
     
@@ -61,7 +60,7 @@ const onSave = async () => {
   }
   catch(error) {
     console.error('Failed To Save Document', error);
-    alert('Error : Failed To Save Document');
+    alert('Error : Failed To Save Document');  // TODO : エラー表示
   }
 };
 
@@ -73,8 +72,7 @@ onMounted(async () => {
       const response = await fetch(`/api/documents/${path.value}`, { method: 'GET' });
       const json: Result<Document> = await response.json();
       if(json.error != null) {
-        console.warn('Something Wrong', json);
-        router.push('/');
+        console.error('Something Wrong', json);
         return json;
       }
       
@@ -83,7 +81,6 @@ onMounted(async () => {
     }
     catch(error) {
       console.error('Failed To Fetch Document', error);
-      router.push('/');
       return { error: error as string };
     }
   };
@@ -96,7 +93,7 @@ onMounted(async () => {
   };
   
   const fetchedDocument = await fetchDocument();
-  if(fetchedDocument.error != null) return;
+  if(fetchedDocument.error != null) return router.push('/');
   
   targetDocument.value = fetchedDocument.result;
   title.value = fetchedDocument.result.title!;
@@ -121,7 +118,7 @@ onBeforeUnmount(() => {
 
 <template>
   <v-form v-model="isValid" class="header-form">
-    <v-text-field v-model="title" :rules="titleRules" label="Title" required />
+    <v-text-field v-model="title" :rules="titleRules" label="タイトル" required />
     <v-btn :disabled="!isValid" @click="onSave">保存</v-btn>
   </v-form>
   <div ref="editor" class="editor" spellcheck="false" />
@@ -161,7 +158,7 @@ onBeforeUnmount(() => {
 }
 
 
-/**
+/*
  * Styles taken from https://prosemirror.net/css/editor.css
  * Required for ProseMirror to work (style) correctly.
  */
@@ -355,7 +352,7 @@ li.ProseMirror-selectednode:after {
 .ProseMirror-icon {
   display: inline-block;
   line-height: 0.8;
-  vertical-align: -2px; /* Compensate for padding */
+  vertical-align: -2px;  /* Compensate for padding */
   padding: 2px 8px;
   cursor: pointer;
 }
@@ -397,6 +394,7 @@ li.ProseMirror-selectednode:after {
 .ProseMirror-focused .ProseMirror-gapcursor {
   display: block;
 }
+
 /* Add space around the hr to make clicking it easier */
 
 .ProseMirror-example-setup-style hr {

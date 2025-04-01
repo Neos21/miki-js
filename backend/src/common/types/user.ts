@@ -36,6 +36,9 @@ export type User = {
   id?: string;
   misskeyUserName?: string;
   misskeyHost?: string;
+  misskeyHostProtocol?: string;
+  
+  passwordHash?: string;
   
   /** 表示名 */
   name?: string;

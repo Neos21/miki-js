@@ -1,4 +1,3 @@
-
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Repository } from 'typeorm';
@@ -13,9 +12,12 @@ export class TreeService {
   
   public async getTree(parentDocumentId: string | undefined): Promise<Result<Array<TreeItem>>> {
     try {
-      const documents: Array<DocumentEntity> = await this.documentsRepository.find({
+      const documents = await this.documentsRepository.find({
         where: {
           parentDocumentId: parentDocumentId ?? IsNull()
+        },
+        order: {
+          title: 'ASC'
         }
       });
       const tree: Array<TreeItem> = documents.map(document => ({

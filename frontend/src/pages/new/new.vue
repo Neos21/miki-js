@@ -6,7 +6,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { isEmptyString } from '../../common/helpers/is-empty-string';
 import { Document } from '../../common/types/document';
 import { Result } from '../../common/types/result';
-import { titleRules } from '../../shared/helpers/validator-title-rules';
+import { titleRules } from '../../shared/helpers/validator-document-title-rules';
 import { useTreeStore } from '../../shared/stores/use-tree-store';
 import { useUserStore } from '../../shared/stores/use-user-store';
 
@@ -53,7 +53,7 @@ const onSubmit = async (): Promise<void> => {
     const json: Result<Document> = await response.json();
     if(json.error != null) {
       console.error('Something Wrong', json);
-      return alert(`Error : ${json.error}`);
+      return alert(`Error : ${json.error}`);  // TODO : エラー表示
     }
     console.log('Document Created', json);
     
@@ -69,7 +69,7 @@ const onSubmit = async (): Promise<void> => {
   }
   catch(error) {
     console.error('Failed To Create Document', error);
-    alert('Error : Failed To Create Document');
+    alert('Error : Failed To Create Document');  // TODO : エラー表示
   }
 };
 
@@ -85,7 +85,7 @@ onMounted(async () => {
     const response = await fetch(`/api/documents/${parentPath.value}`, { method: 'GET' });
     const json: Result<Document> = await response.json();
     if(json.error != null) {
-      console.warn('Something Wrong', json);
+      console.error('Something Wrong', json);
       router.push('/');
       return;
     }
@@ -102,10 +102,10 @@ onMounted(async () => {
 
 <template>
   <h1>ドキュメントを作成</h1>
-  <p>配下に作成 : <code>/wiki/{{ parentPath }}</code></p>
+  <p>配下に作成 : <code>/wiki{{ isEmptyString(parentPath) ? '' : `/${parentPath}` }}</code></p>
   <v-form v-model="isValid">
-    <p><v-text-field v-model="uri"   :rules="uriRules"   label="URI"   required /></p>
-    <p><v-text-field v-model="title" :rules="titleRules" label="Title" required /></p>
+    <p><v-text-field v-model="uri"   :rules="uriRules"   label="URI"      required /></p>
+    <p><v-text-field v-model="title" :rules="titleRules" label="タイトル" required /></p>
     <p><v-btn :disabled="!isValid" @click="onSubmit">作成</v-btn></p>
   </v-form>
 </template>

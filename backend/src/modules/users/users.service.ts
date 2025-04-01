@@ -1,8 +1,9 @@
-
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as bcryptjs from 'bcryptjs';
 import { Repository } from 'typeorm';
 
+import { isEmptyString } from '../../common/helpers/is-empty-string';
 import { Result } from '../../common/types/result';
 import { User } from '../../common/types/user';
 import { UserEntity } from '../../shared/entities/user.entity';
@@ -13,7 +14,13 @@ export class UsersService {
   
   public async createUser(user: User): Promise<Result<User>> {
     try {
-      const createdUser: User = await this.usersRepository.save(user);
+      // パスワードをハッシュ化して保存する
+      if(!isEmptyString(user.passwordHash)) {
+        const passwordHash = await bcryptjs.hash(user.passwordHash!, 10);
+        user.passwordHash = passwordHash;
+      }
+      
+      const createdUser = await this.usersRepository.save(user as UserEntity);
       return { result: createdUser };
     }
     catch(error) {
@@ -23,7 +30,8 @@ export class UsersService {
   
   public async getUser(id: string): Promise<Result<User>> {
     try {
-      const user: User = await this.usersRepository.findOneByOrFail({ id });
+      const user = await this.usersRepository.findOneBy({ id });
+      if(user == null) return { error: 'User Not Found', code: HttpStatus.NOT_FOUND };
       return { result: user };
     }
     catch(error) {

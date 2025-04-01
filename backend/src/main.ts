@@ -1,4 +1,3 @@
-
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
@@ -14,7 +13,6 @@ async function bootstrap() {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   
-  // CORS を有効にする
   app.enableCors({
     origin: (/localhost/u),  // `localhost` を全て許可するため正規表現を使う
     methods: 'GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD',
@@ -27,8 +25,6 @@ async function bootstrap() {
   
   const logger = new Logger(bootstrap.name);
   logger.log(`${cyan('Server Started At Port [')}${yellow(String(port))}${cyan(']')}`);
-  
-  // ルーティング一覧を出力する
   logger.log(listRoutes(app.getHttpServer()._events.request.router));
 }
 void bootstrap();

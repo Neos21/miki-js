@@ -2,7 +2,6 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { snakeToCamelCaseObject } from '../../common/helpers/convert-case';
 import { isEmptyString } from '../../common/helpers/is-empty-string';
 import { Document } from '../../common/types/document';
 import { Result } from '../../common/types/result';
@@ -29,24 +28,23 @@ export class DocumentsService {
   public async getDocumentByFullPath(fullPath: string): Promise<Result<Document>> {
     try {
       const lastUri = fullPath.split('/').pop();
-      const rawDocumentEntities: Array<any> = await this.documentsRepository.query(`
+      const documentEntities: Array<DocumentEntity> = await this.documentsRepository.query(`
         WITH RECURSIVE hierarchy AS (
-          SELECT id, uri, parent_document_id
+          SELECT id, uri, "parentDocumentId"
           FROM documents
           WHERE uri = $1
           UNION ALL
-          SELECT child_documents.id, child_documents.uri, child_documents.parent_document_id
-          FROM documents child_documents
-          INNER JOIN hierarchy ON child_documents.id::UUID = hierarchy.parent_document_id::UUID
+          SELECT "childDocuments".id, "childDocuments".uri, "childDocuments"."parentDocumentId"
+          FROM documents "childDocuments"
+          INNER JOIN hierarchy ON "childDocuments".id::UUID = hierarchy."parentDocumentId"::UUID
         )
         SELECT * FROM documents
         WHERE id IN (SELECT id FROM hierarchy)
-        ORDER BY parent_document_id NULLS FIRST;
-      `, [lastUri]);  // この時点ではスネークケースの生オブジェクトが取れる点に注意
-      if(rawDocumentEntities == null || rawDocumentEntities.length === 0) return { error: 'The Document Not Found (Last URI Does Not Exist)', code: HttpStatus.NOT_FOUND };
+        ORDER BY "parentDocumentId" NULLS FIRST;
+      `, [lastUri]);  // NOTE : キャメルケースで SQL を書くことで Entity クラスとの変換を省く
+      if(documentEntities == null || documentEntities.length === 0) return { error: 'The Document Not Found (Last URI Does Not Exist)', code: HttpStatus.NOT_FOUND };
       
       // フルパスが完全一致する Document を探す
-      const documentEntities: Array<DocumentEntity> = snakeToCamelCaseObject(rawDocumentEntities) as Array<DocumentEntity>;
       const documentEntity = documentEntities.find(documentEntity => this.getFullPath(documentEntity, documentEntities) === fullPath);
       if(documentEntity == null) return { error: 'The Document Not Found (Full Path Does Not Match)', code: HttpStatus.NOT_FOUND };
       

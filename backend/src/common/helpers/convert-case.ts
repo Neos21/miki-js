@@ -2,12 +2,10 @@ import { CamelToSnakeCaseObject, SnakeToCamelCaseObject } from '../types/cases';
 
 import { isObject } from './is-object';
 
-/** camelCase → snake_case */
 export const camelToSnakeCase = (value: string): string => {
   return value.replace((/[A-Z]/g), character => `_${character.toLowerCase()}`);
 };
 
-/** camelCase → snake_case オブジェクト */
 export const camelToSnakeCaseObject = <T extends object>(object: T): CamelToSnakeCaseObject<T> => {
   if(object instanceof Date) {
     return object.getTime().toString() as CamelToSnakeCaseObject<T>;
@@ -35,12 +33,10 @@ export const camelToSnakeCaseObject = <T extends object>(object: T): CamelToSnak
   return object as CamelToSnakeCaseObject<T>;
 };
 
-/** snake_case → camelCase */
 export const snakeToCamelCase = (value: string): string => {
   return value.replace((/_([a-z])/g), (_, character) => character.toUpperCase());
 };
 
-/** snake_case → camelCase オブジェクト */
 export const snakeToCamelCaseObject = <T extends object>(object: T): SnakeToCamelCaseObject<T> => {
   if(object instanceof Date) {
     return object.getTime().toString() as SnakeToCamelCaseObject<T>;

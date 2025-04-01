@@ -22,7 +22,7 @@ const fetchDocument = async (): Promise<void> => {
     const response = await fetch(`/api/documents/${path.value}`, { method: 'GET' });
     const json: Result<Document> = await response.json();
     if(json.error != null) {
-      console.warn('Something Wrong', json);
+      console.error('Something Wrong', json);
       router.push('/');
       return;
     }
@@ -46,7 +46,7 @@ watch(() => route.path, fetchDocument);
 <template>
   <header class="header">{{ currentDocument?.title || '&nbsp;' }}</header>
   <div v-html="htmlContent" />  <!-- eslint-disable-line vue/no-v-html -->
-  <footer class="footer">Last-Modified : {{ currentDocument?.updatedAt ? epochTimeMsToJstString(currentDocument.updatedAt as string, 'YYYY-MM-DD HH:mm:SS') : '' }} By {{ currentDocument?.updatedUserId }}</footer>
+  <footer class="footer">Last-Modified : {{ currentDocument?.updatedAt ? epochTimeMsToJstString(new Date(currentDocument.updatedAt).getTime() as unknown as string, 'YYYY-MM-DD HH:mm:SS') : '' }} By {{ currentDocument?.updatedUserId }}</footer>
 </template>
 
 <style scoped>
