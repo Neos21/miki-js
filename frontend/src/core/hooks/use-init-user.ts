@@ -24,6 +24,7 @@ export const useInitUser = () => {
   
   const createUser = async (misskeyHost: string, misskeyHostUrl: string, sessionId: string): Promise<void> => {
     try {
+      // この API は1回目のコールしか成功しない (2回目以降は `ok: false` になる)
       const miAuthResponse = await fetch(`${misskeyHostUrl}/api/miauth/${sessionId}/check`, { method: 'POST' });
       const miAuthJson = await miAuthResponse.json();
       if(!miAuthJson.ok) return console.warn('Failed To Check MiAuth', miAuthJson);
