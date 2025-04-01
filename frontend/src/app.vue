@@ -38,10 +38,6 @@ onMounted(() => {
       </v-container>
       
       <DocumentTree />
-      
-      <v-list density="compact">
-        <v-list-item prepend-icon="mdi-account-cog" link to="/admin">Admin</v-list-item>
-      </v-list>
     </v-navigation-drawer>
     
     <v-main height="100vh">

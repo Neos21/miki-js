@@ -22,41 +22,7 @@ export const useInitUser = () => {
     }
   };
   
-  const createUser = async (misskeyHost: string, misskeyHostUrl: string, sessionId: string): Promise<void> => {
-    try {
-      // この API は1回目のコールしか成功しない (2回目以降は `ok: false` になる)
-      const miAuthResponse = await fetch(`${misskeyHostUrl}/api/miauth/${sessionId}/check`, { method: 'POST' });
-      const miAuthJson = await miAuthResponse.json();
-      if(!miAuthJson.ok) return console.warn('Failed To Check MiAuth', miAuthJson);
-      
-      // LocalStorage に保存する
-      const user: User = {
-        id             : `@${miAuthJson.user.username}@${misskeyHost}`,
-        misskeyUserName: miAuthJson.user.username,
-        misskeyHost    : misskeyHost,
-        name           : miAuthJson.user.username,
-        avatarUrl      : miAuthJson.user.avatarUrl,
-        sessionId      : sessionId,
-        token          : miAuthJson.token,
-        misskeyUser    : miAuthJson.user
-      };
-      userStore.setUser(user);
-      // DB にユーザを登録する
-      const response = await fetch('/api/users', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(user)
-      });
-      const json = await response.json();
-      console.log('User Created', json);
-    }
-    catch(error) {
-      console.error('Failed To Create User', error);
-    }
-  };
-  
   return {
-    fetchUser,
-    createUser
+    fetchUser
   };
 };
