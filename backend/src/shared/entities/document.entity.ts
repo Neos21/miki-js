@@ -5,7 +5,7 @@ export class DocumentEntity {
   @PrimaryGeneratedColumn('uuid', { name: 'id' })
   public id: string;
   
-  /** `/path/to/this-page` の場合 `this-page` 部分を任意に決められる */
+  /** `/path/to/this-page` の場合の `this-page` 部分 */
   @Column({ name: 'uri' })
   public uri: string;
   

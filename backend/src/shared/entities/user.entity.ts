@@ -16,7 +16,7 @@ export class UserEntity {
   
   /** MiAuth の API を叩く時に使用する・変更不可 */
   @Column({ name: 'misskey_host_protocol', default: 'https://' })
-  public misskeyHostProtocol: 'http://' | 'https://';
+  public misskeyHostProtocol: 'https://' | 'http://';
   
   /** パスワードハッシュ・デフォルトでは SELECT しても取得できないようにする */
   @Column({ name: 'password_hash', select: false })

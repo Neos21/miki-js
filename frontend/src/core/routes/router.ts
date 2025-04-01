@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
-import Admin from '../../pages/admin/admin.vue';
+import AdminLogin from '../../pages/admin/login/admin-login.vue';
 import Edit from '../../pages/edit/edit.vue';
 import Home from '../../pages/home/home.vue';
 import New from '../../pages/new/new.vue';
@@ -18,7 +18,7 @@ const routes = [
   { path: '/edit'              , redirect : '/'                                        },
   { path: '/edit/:catchAll(.*)', component: Edit                                       },
   { path: '/user-preferences'  , component: UserPreferences, beforeEnter: [loginGuard] },
-  { path: '/admin'             , component: Admin                                      }  // TODO : Guard
+  { path: '/admin/login'       , component: AdminLogin     , beforeEnter: [loginGuard] }  // ログインしているユーザのみ管理用エリアにも入れる
 ];
 
 export const router = createRouter({

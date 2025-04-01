@@ -10,7 +10,7 @@ defineProps<{
   parentUriPath: string
 }>();
 
-const toggleTreeItem = async (treeItem: TreeItem) => {
+const toggleTreeItem = async (treeItem: TreeItem): Promise<void> => {
   treeItem.isOpened = !treeItem.isOpened;
   if(!treeItem.isOpened) return;
   

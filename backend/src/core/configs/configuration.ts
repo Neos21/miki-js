@@ -36,10 +36,11 @@ const getBooleanValue = (envName: string): boolean => {
 export const configuration = (): { [key: string]: string | number | boolean } => ({
   noColour : getBooleanValue('NO_COLOR'                        ),  // ロガーの色付けをしない : NestJS のロガー `cli-colors.util.js` と同じ環境変数名・確認のため宣言
   port     : getNumberValue ('MIKIJS_PORT'      , 2180         ),  // ポート番号
+  jwtSecret: getStringValue ('MIKIJS_JWT_SECRET', 'CHANGE-THIS'),  // JWT 認証シークレット
   dbHost   : getStringValue ('MIKIJS_DB_HOST'   , 'localhost'  ),  // DB ホスト
   dbPort   : getNumberValue ('MIKIJS_DB_PORT'   , 2183         ),  // DB ポート
   dbUser   : getStringValue ('MIKIJS_DB_USER'   , 'CHANGE-THIS'),  // DB ユーザ名
   dbPass   : getStringValue ('MIKIJS_DB_PASS'   , 'CHANGE-THIS'),  // DB パスワード
   dbName   : getStringValue ('MIKIJS_DB_NAME'   , 'mikijs'     ),  // DB データベース名
-  adminPass: getStringValue ('MIKIJS_ADMIN_PASS', 'CHANGE-THIS')   // 管理パスワード
+  adminPass: getStringValue ('MIKIJS_ADMIN_PASS', 'CHANGE-THIS')   // 管理者パスワード
 });

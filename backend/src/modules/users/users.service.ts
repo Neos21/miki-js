@@ -1,4 +1,3 @@
-
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -13,7 +12,7 @@ export class UsersService {
   
   public async createUser(user: User): Promise<Result<User>> {
     try {
-      const createdUser: User = await this.usersRepository.save(user);
+      const createdUser = await this.usersRepository.save(user as UserEntity);
       return { result: createdUser };
     }
     catch(error) {
@@ -23,7 +22,7 @@ export class UsersService {
   
   public async getUser(id: string): Promise<Result<User>> {
     try {
-      const user: User = await this.usersRepository.findOneByOrFail({ id });
+      const user = await this.usersRepository.findOneByOrFail({ id });
       return { result: user };
     }
     catch(error) {

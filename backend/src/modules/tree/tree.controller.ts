@@ -12,8 +12,8 @@ export class TreeController {
   
   @Get('')
   public async getRootTree(@Query('parent_document_id') parentDocumentId: string | undefined, @Res() res: Response): Promise<Response<Result<Array<TreeItem>>>> {
-    const result: Result<Array<TreeItem>> = await this.treeService.getTree(parentDocumentId);
-    if(result.error != null) return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(result);
+    const result = await this.treeService.getTree(parentDocumentId);
+    if(result.error != null) return res.status(result.code ?? HttpStatus.INTERNAL_SERVER_ERROR).json(result);
     
     return res.status(HttpStatus.OK).json(result);
   }

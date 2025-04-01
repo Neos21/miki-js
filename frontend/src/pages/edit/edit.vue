@@ -33,7 +33,6 @@ const onSave = async () => {
   const getMarkdown = () => editorView == null ? '' : defaultMarkdownSerializer.serialize(editorView.state.doc);
   
   try {
-    // 保存する Document オブジェクトを作る
     const documentToSave = targetDocument.value!;
     documentToSave.title         = title.value;
     documentToSave.content       = getMarkdown();
@@ -161,7 +160,7 @@ onBeforeUnmount(() => {
 }
 
 
-/**
+/*
  * Styles taken from https://prosemirror.net/css/editor.css
  * Required for ProseMirror to work (style) correctly.
  */
@@ -355,7 +354,7 @@ li.ProseMirror-selectednode:after {
 .ProseMirror-icon {
   display: inline-block;
   line-height: 0.8;
-  vertical-align: -2px; /* Compensate for padding */
+  vertical-align: -2px;  /* Compensate for padding */
   padding: 2px 8px;
   cursor: pointer;
 }
@@ -397,6 +396,7 @@ li.ProseMirror-selectednode:after {
 .ProseMirror-focused .ProseMirror-gapcursor {
   display: block;
 }
+
 /* Add space around the hr to make clicking it easier */
 
 .ProseMirror-example-setup-style hr {

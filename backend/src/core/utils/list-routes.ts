@@ -3,9 +3,8 @@ import expressListEndpoints from 'express-list-endpoints';
 
 import { cyan, green, grey, red, yellow } from './colour-logger';
 
-/** ルーティング一覧を組み立てる */
 export const listRoutes = (router: Express): string => {
-  const endpoints: Array<expressListEndpoints.Endpoint> = expressListEndpoints(router);
+  const endpoints = expressListEndpoints(router);
   // 最長のパスに合わせて整形する
   const longestPathLength = Math.max(...endpoints.map((endpoint) => endpoint.path.length));
   // メソッド別に色別けする
