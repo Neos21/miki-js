@@ -40,7 +40,7 @@ export class DocumentsService {
         )
         SELECT * FROM documents
         WHERE id IN (SELECT id FROM hierarchy)
-        ORDER BY "parentDocumentId" NULLS FIRST;
+        ORDER BY "parentDocumentId" ASC NULLS FIRST;
       `, [lastUri]);  // NOTE : キャメルケースで SQL を書くことで Entity クラスとの変換を省く
       if(documentEntities == null || documentEntities.length === 0) return { error: 'The Document Not Found (Last URI Does Not Exist)', code: HttpStatus.NOT_FOUND };
       
@@ -61,7 +61,7 @@ export class DocumentsService {
       if(targetDocument == null) return { error: 'The Document ID Does Not Exist', code: HttpStatus.BAD_REQUEST };
       
       // DB のバージョンと同じ値でない場合は競合の恐れがあるため更新しない
-      if(document.version !== targetDocument.version) return { error: 'Version Mimatch', code: HttpStatus.BAD_REQUEST };
+      if(document.version !== targetDocument.version) return { error: 'Version Mismatch', code: HttpStatus.BAD_REQUEST };
       
       // バージョンをインクリメントして保存する
       document.version = document.version + 1;

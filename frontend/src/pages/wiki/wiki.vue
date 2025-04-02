@@ -30,6 +30,11 @@ const fetchDocument = async (): Promise<void> => {
     console.log('Document Fetched', json);
     currentDocument.value = json.result;
     htmlContent.value     = renderMarkdown(json.result.content!);
+    
+    // TODO : テスト
+    const testRes = await fetch(`/api/tree/to-root?targetDocumentId=${currentDocument.value.id}`, { method: 'GET' });
+    const testJson = await testRes.json();
+    console.log('結果', testJson);
   }
   catch(error) {
     console.error('Failed To Fetch Document', error);

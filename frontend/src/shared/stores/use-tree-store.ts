@@ -10,7 +10,7 @@ export const useTreeStore = defineStore('tree', {
   actions: {
     async fetchRootTree(): Promise<void> {
       try {
-        const response = await fetch('/api/tree', { method: 'GET' });
+        const response = await fetch('/api/tree/children', { method: 'GET' });
         const json: Result<Array<TreeItem>> = await response.json();
         if(json.error != null) return console.warn('Something Wrong', json);
         
