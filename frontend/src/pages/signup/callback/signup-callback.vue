@@ -10,8 +10,8 @@ import { passwordRules } from '../../../shared/helpers/validator-user-password-r
 import { useUserStore } from '../../../shared/stores/use-user-store';
 import { Signup } from '../../../shared/types/signup';
 
+const route  = useRoute();
 const router = useRouter();
-const route = useRoute();
 
 const userStore = useUserStore();
 

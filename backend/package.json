@@ -8,6 +8,7 @@
     "build": "nest build",
     "dev": "nest start --watch",
     "lint": "eslint --config ./.eslint.config.js ./src/**/*.ts",
+    "lint-fix": "npm run lint -- --fix",
     "eslint": "eslint"
   },
   "dependencies": {

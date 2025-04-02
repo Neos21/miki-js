@@ -18,7 +18,7 @@ export class TreeService {
           parentDocumentId: parentDocumentId ?? IsNull()
         },
         order: {
-          title: 'ASC'
+          title: 'ASC'  // 一応バックエンドでも `title` で昇順ソートしておくが、フロントエンドのソート処理に統一している
         }
       });
       const tree: Array<TreeItem> = documents.map(document => ({
@@ -57,9 +57,6 @@ export class TreeService {
   
     // ツリー構造を組み立てる
     const tree = this.buildTreeWithSiblings(documentEntities, targetDocumentId);
-    
-    console.log('DOCS', JSON.stringify(documentEntities, null, '  '));  // TODO
-    console.log('TREE', JSON.stringify(tree, null, '  '));
     return { result: tree };
   }
   
@@ -83,8 +80,8 @@ export class TreeService {
     
     // ツリーを構築する
     documentEntities.forEach(documentEntity => {
-      // ルートから targetDocumentId までは isOpened: true とする
-      if(documentIdsToOpen.has(documentEntity.id)) {
+      // ルートから targetDocumentId までは isOpened: true とする・targetDocumentId の要素自体は子要素がいる場合もあるので閉じた状態にしておく
+      if(documentIdsToOpen.has(documentEntity.id) && documentEntity.id !== targetDocumentId) {
         documentEntitiesMap.get(documentEntity.id)!.isOpened = true;
       }
       

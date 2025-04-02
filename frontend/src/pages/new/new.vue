@@ -7,21 +7,18 @@ import { isEmptyString } from '../../common/helpers/is-empty-string';
 import { Document } from '../../common/types/document';
 import { Result } from '../../common/types/result';
 import { titleRules } from '../../shared/helpers/validator-document-title-rules';
-import { useTreeStore } from '../../shared/stores/use-tree-store';
 import { useUserStore } from '../../shared/stores/use-user-store';
 
 const route  = useRoute();
 const router = useRouter();
 
 const userStore = useUserStore();
-const treeStore = useTreeStore();
 
 const parentPath       = ref<string>('');
 const parentDocumentId = ref<string | null>(null);
-
-const isValid = ref<boolean>(false);
-const uri     = ref<string>('');
-const title   = ref<string>('');
+const isValid          = ref<boolean>(false);
+const uri              = ref<string>('');
+const title            = ref<string>('');
 
 const uriRules = [
   (value: string): boolean | string => {
@@ -57,10 +54,8 @@ const onSubmit = async (): Promise<void> => {
     }
     console.log('Document Created', json);
     
+    // 新規作成したページに移動する : ツリー更新は Wiki ページ内で行う
     if(isEmptyString(parentPath.value)) {
-      // ツリーを再読込する
-      await treeStore.fetchRootTree();  // TODO : 何らかツリー読み込みして Store のモノとマージする
-      // 新規作成したページに移動する
       router.push(`/wiki/${uri.value}`);
     }
     else {

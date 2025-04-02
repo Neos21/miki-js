@@ -51,11 +51,8 @@ const onSave = async () => {
       console.error('Something Wrong', json);
       return alert(`Error : ${json.error}`);  // TODO : エラー表示
     }
+    
     console.log('Document Saved', json);
-    
-    // メニューのタイトルを更新する TODO : 何らかツリー読み込みして Store のモノとマージする
-    if(documentToSave.parentDocumentId == null) await treeStore.fetchRootTree();
-    
     router.push(`/wiki/${path.value}`);
   }
   catch(error) {
@@ -85,6 +82,25 @@ onMounted(async () => {
     }
   };
   
+  /** 表示対象ページまでのツリーを取得しマージする (本画面が初期表示の場合も考慮して) */
+  const fetchTree = async (targetDocumentId: string): Promise<Result<boolean>> => {
+    try {
+      const response = await fetch(`/api/tree/to-root?targetDocumentId=${targetDocumentId}`, { method: 'GET' });
+      const json = await response.json();
+      if(json.error != null) {
+        console.warn('');  // ツリー表示がうまくいかない場合は無視
+        return { error: json.error, code: json.code ?? 500 };
+      }
+      
+      treeStore.mergeTree(json.result);
+      return { result: true };
+    }
+    catch(error) {
+      console.warn('Failed To Fetch Tree', error);  // ツリー表示がうまくいかない場合は無視
+      return { error: error as string, code: 500 };
+    }
+  };
+  
   const markdownToProseMirrorDoc = (markdown: string): Node => {
     const html = renderMarkdown(markdown);
     const element = window.document.createElement('div');
@@ -92,15 +108,18 @@ onMounted(async () => {
     return DOMParser.fromSchema(schema).parse(element);
   };
   
-  const fetchedDocument = await fetchDocument();
-  if(fetchedDocument.error != null) return router.push('/');
+  const fetchedDocumentResult = await fetchDocument();
+  if(fetchedDocumentResult.error != null) return router.push('/');
   
-  targetDocument.value = fetchedDocument.result;
-  title.value = fetchedDocument.result.title!;
+  targetDocument.value = fetchedDocumentResult.result;
+  title.value          = fetchedDocumentResult.result.title!;
+  
+  // ツリー表示とマージ処理を非同期に行う・うまくいかない場合も中断しない
+  fetchTree(fetchedDocumentResult.result.id!);
   
   editorView = new EditorView(editor.value as HTMLDivElement, {
     state: EditorState.create({
-      doc: markdownToProseMirrorDoc(fetchedDocument.result.content!),
+      doc: markdownToProseMirrorDoc(fetchedDocumentResult.result.content!),
       plugins: exampleSetup({schema}),
     }),
     dispatchTransaction: transaction => {
@@ -118,7 +137,7 @@ onBeforeUnmount(() => {
 
 <template>
   <v-form v-model="isValid" class="header-form">
-    <v-text-field v-model="title" :rules="titleRules" label="タイトル" required />
+    <v-text-field v-model="title" :rules="titleRules" label="タイトル" required density="compact" />
     <v-btn :disabled="!isValid" @click="onSave">保存</v-btn>
   </v-form>
   <div ref="editor" class="editor" spellcheck="false" />
