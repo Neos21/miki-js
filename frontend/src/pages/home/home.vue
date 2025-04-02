@@ -17,7 +17,7 @@ onMounted(async () => {
     const response = await fetch('/api/documents/home', { method: 'GET' });
     const json: Result<Document> = await response.json();
     if(json.error != null) {
-      console.error('Something Wrong', json);
+      console.warn('Something Wrong (Maybe Home Document Does Not Exist)', json);
       state.value = 'LOADED';
       return;
     }

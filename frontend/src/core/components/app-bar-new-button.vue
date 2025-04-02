@@ -7,8 +7,8 @@ import { isEmptyObject } from '../../common/helpers/is-empty-object';
 import { isEmptyString } from '../../common/helpers/is-empty-string';
 import { useUserStore } from '../../shared/stores/use-user-store';
 
+const route  = useRoute();
 const router = useRouter();
-const route = useRoute();
 
 const userStore = useUserStore();
 

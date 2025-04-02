@@ -9,6 +9,7 @@
     "dev": "vite --host --port 2182",
     "build": "vue-tsc --build && vite build",
     "lint": "eslint --config ./.eslint.config.js ./src/**/*.{ts,vue}",
+    "lint-fix": "npm run lint -- --fix",
     "eslint": "eslint"
   },
   "dependencies": {

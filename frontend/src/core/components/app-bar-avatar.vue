@@ -2,15 +2,27 @@
 import { onMounted } from 'vue';
 
 import { isEmptyObject } from '../../common/helpers/is-empty-object';
+import { Result } from '../../common/types/result';
+import { User } from '../../common/types/user';
 import { useUserStore } from '../../shared/stores/use-user-store';
-import { useInitUser } from '../hooks/use-init-user';
 
 const userStore = useUserStore();
-const { fetchUser } = useInitUser();
 
 onMounted(async () => {
   // LocalStorage・Store からユーザ情報を復元でき API で最新版を取れればログイン済にする
-  await fetchUser();
+  try {
+    const storedUser = userStore.getUser();
+    if(isEmptyObject(storedUser)) return console.log('The User Does Not Exist In The User Store (LocalStorage)');
+    
+    const response = await fetch(`/api/users/${storedUser.id}`, { method: 'GET' });
+    const json: Result<User> = await response.json();
+    if(json.error != null) return console.error('Something Wrong', json);
+    userStore.setUser(json.result);
+    console.log('User Fetched', json);
+  }
+  catch(error) {
+    console.error('Failed To Fetch User', error);
+  }
 });
 </script>
 
@@ -22,9 +34,9 @@ onMounted(async () => {
       </v-btn>
     </template>
   </v-tooltip>
-  <v-tooltip v-else text="アカウント登録" location="start">
+  <v-tooltip v-else text="アカウント" location="start">
     <template #activator="{ props }">
-      <v-btn icon v-bind="props" to="/signup">
+      <v-btn icon v-bind="props" to="/login">
         <v-icon>mdi-account-circle</v-icon>
       </v-btn>
     </template>

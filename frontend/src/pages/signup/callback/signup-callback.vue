@@ -10,19 +10,17 @@ import { passwordRules } from '../../../shared/helpers/validator-user-password-r
 import { useUserStore } from '../../../shared/stores/use-user-store';
 import { Signup } from '../../../shared/types/signup';
 
+const route  = useRoute();
 const router = useRouter();
-const route = useRoute();
 
-const state = ref<'LOADING' | 'SUCCEEDED' | 'FAILED'>('LOADING');
+const userStore = useUserStore();
 
+const state       = ref<'LOADING' | 'SUCCEEDED' | 'FAILED'>('LOADING');
 const sessionId   = ref<string | null>(null);
 const signup      = ref<Signup | null>(null);
 const misskeyUser = ref<{[key: string]: any} | null>(null);
-
-const isValid  = ref<boolean>(false);
-const password = ref<string>('');
-
-const userStore = useUserStore();
+const isValid     = ref<boolean>(false);
+const password    = ref<string>('');
 
 const createOrUpdateUser = async (inputPassword?: string): Promise<void> => {
   try {

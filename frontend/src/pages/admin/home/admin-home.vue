@@ -9,8 +9,8 @@ import { MisskeyHost } from '../../../common/types/misskey-host';
 import { Result } from '../../../common/types/result';
 import { useAdminStore } from '../../../shared/stores/use-admin-store';
 
-
 const router = useRouter();
+
 const adminStore = useAdminStore();
 
 const isValid      = ref<boolean>(false);

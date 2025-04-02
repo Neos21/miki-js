@@ -12,7 +12,7 @@ export class MisskeyHostsService {
   
   public async getMisskeyHosts(): Promise<Result<Array<MisskeyHost>>> {
     try {
-      const misskeyHosts = await this.misskeyHostsRepository.find({ order: { host: 'ASC' } });
+      const misskeyHosts = await this.misskeyHostsRepository.find({ order: { id: 'ASC' } });
       return { result: misskeyHosts };
     }
     catch(error) {

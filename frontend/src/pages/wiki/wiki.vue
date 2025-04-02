@@ -7,9 +7,12 @@ import { epochTimeMsToJstString } from '../../common/helpers/convert-date-to-jst
 import { Document } from '../../common/types/document';
 import { Result } from '../../common/types/result';
 import { renderMarkdown } from '../../shared/helpers/render-markdown';
+import { useTreeStore } from '../../shared/stores/use-tree-store';
 
 const route  = useRoute();
 const router = useRouter();
+
+const treeStore = useTreeStore();
 
 const path            = ref<string>('');
 const currentDocument = ref<Document | null>(null);
@@ -34,6 +37,19 @@ const fetchDocument = async (): Promise<void> => {
   catch(error) {
     console.error('Failed To Fetch Document', error);
     router.push('/');
+    return;
+  }
+  
+  // 表示対象ページまでのツリーを取得しマージする (本画面が初期表示の場合も考慮して)
+  try {
+    const response = await fetch(`/api/tree/to-root?targetDocumentId=${currentDocument.value.id}`, { method: 'GET' });
+    const json = await response.json();
+    if(json.error != null) return console.warn('Something Wrong', json);  // ツリー表示がうまくいかない場合は無視
+    
+    treeStore.mergeTree(json.result);
+  }
+  catch(error) {
+    console.warn('Failed To Fetch Tree', error);  // ツリー表示がうまくいかない場合は無視
   }
 };
 
