@@ -53,7 +53,7 @@ const onSave = async () => {
     }
     console.log('Document Saved', json);
     
-    // メニューのタイトルを更新する
+    // メニューのタイトルを更新する TODO : 何らかツリー読み込みして Store のモノとマージする
     if(documentToSave.parentDocumentId == null) await treeStore.fetchRootTree();
     
     router.push(`/wiki/${path.value}`);

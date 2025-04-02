@@ -35,27 +35,10 @@ export class TreeService {
     }
   }
   
-  public async getToRoot(targetDocumentId: string): Promise<Result<Array<any>>> {
-    const rawDocuments = await this.documentsRepository.query(`
-      WITH RECURSIVE path AS (
-        SELECT id, uri, title, "parentDocumentId"
-        FROM documents
-        WHERE id = $1
-        UNION ALL
-        SELECT "childDocuments".id, "childDocuments".uri, "childDocuments".title, "childDocuments"."parentDocumentId"
-        FROM documents "childDocuments"
-        INNER JOIN path ON "childDocuments".id::UUID = path."parentDocumentId"::UUID
-      )
-      SELECT id, uri, title, "parentDocumentId" FROM path;
-    `, [targetDocumentId]);
-    const documents = rawDocuments.reverse();  // ルートからの順番に並べ替える
-    return { result: documents };
-  }
-  
   public async getToRootWithSiblings(targetDocumentId: string): Promise<Result<Array<any>>> {
     // WITH RECURSIVE で、指定されたドキュメントを起点にルートまでのパスを取得する
     // SELECT 文で、各階層の兄弟要素を取得する
-    const rawDocuments = await this.documentsRepository.query(`
+    const documentEntities: Array<DocumentEntity> = await this.documentsRepository.query(`
       WITH RECURSIVE path AS (
         SELECT id, uri, title, "parentDocumentId"
         FROM documents
@@ -73,45 +56,45 @@ export class TreeService {
     `, [targetDocumentId]);
   
     // ツリー構造を組み立てる
-    const tree = this.buildTreeWithSiblings(rawDocuments, targetDocumentId);
+    const tree = this.buildTreeWithSiblings(documentEntities, targetDocumentId);
     
-    console.log('DOCS', JSON.stringify(rawDocuments, null, '  '));
+    console.log('DOCS', JSON.stringify(documentEntities, null, '  '));  // TODO
     console.log('TREE', JSON.stringify(tree, null, '  '));
     return { result: tree };
   }
   
-  private buildTreeWithSiblings(documents: any[], targetDocumentId: string): any[] {
-    const map = new Map<string, any>();
-    const tree: any[] = [];
+  private buildTreeWithSiblings(documentEntities: Array<DocumentEntity>, targetDocumentId: string): Array<TreeItem> {
+    const documentEntitiesMap = new Map<string, TreeItem>();
+    const tree: Array<TreeItem> = [];
     
     // すべてのドキュメントをマップに登録する
-    documents.forEach(document => {
-      map.set(document.id, { id: document.id, uri: document.uri, title: document.title, children: [], isOpened: false });
+    documentEntities.forEach(documentEntity => {
+      documentEntitiesMap.set(documentEntity.id, { id: documentEntity.id, uri: documentEntity.uri, title: documentEntity.title, children: [], isOpened: false });
     });
     
      // ルートから targetDocumentId までのパスを控えておく (階層メニューとして開いた状態にしたいモノ)
-    let currentDocumentId = targetDocumentId;
-    const documentIdsOpened = new Set<string>();
+    let currentDocumentId: string | null = targetDocumentId;
+    const documentIdsToOpen = new Set<string>();
     while(currentDocumentId != null) {
-      documentIdsOpened.add(currentDocumentId);
-      const parentDocumentId = documents.find(document => document.id === currentDocumentId).parentDocumentId ?? null;
+      documentIdsToOpen.add(currentDocumentId);
+      const parentDocumentId = documentEntities.find(document => document.id === currentDocumentId)?.parentDocumentId ?? null;
       currentDocumentId = parentDocumentId;
     }
     
-    // ツリーを構築
-    documents.forEach(document => {
+    // ツリーを構築する
+    documentEntities.forEach(documentEntity => {
       // ルートから targetDocumentId までは isOpened: true とする
-      if(documentIdsOpened.has(document.id)) {
-        map.get(document.id).isOpened = true;
+      if(documentIdsToOpen.has(documentEntity.id)) {
+        documentEntitiesMap.get(documentEntity.id)!.isOpened = true;
       }
       
-      if(document.parentDocumentId != null) {
+      if(documentEntity.parentDocumentId != null) {
         // 親の children に兄弟要素を追加する
-        map.get(document.parentDocumentId).children.push(map.get(document.id));
+        documentEntitiesMap.get(documentEntity.parentDocumentId)!.children!.push(documentEntitiesMap.get(documentEntity.id)!);
       }
       else {
         // ルート要素として追加する
-        tree.push(map.get(document.id));
+        tree.push(documentEntitiesMap.get(documentEntity.id)!);
       }
     });
     

@@ -9,6 +9,7 @@ const treeStore = useTreeStore();
 
 onMounted(async () => {
   await treeStore.fetchRootTree();
+  // TODO : 初期表示時に開いておきたい階層があれば処理する
 });
 </script>
 

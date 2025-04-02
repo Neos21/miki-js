@@ -59,7 +59,7 @@ const onSubmit = async (): Promise<void> => {
     
     if(isEmptyString(parentPath.value)) {
       // ツリーを再読込する
-      await treeStore.fetchRootTree();
+      await treeStore.fetchRootTree();  // TODO : 何らかツリー読み込みして Store のモノとマージする
       // 新規作成したページに移動する
       router.push(`/wiki/${uri.value}`);
     }

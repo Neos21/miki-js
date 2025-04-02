@@ -13,16 +13,14 @@ import { Signup } from '../../../shared/types/signup';
 const router = useRouter();
 const route = useRoute();
 
-const state = ref<'LOADING' | 'SUCCEEDED' | 'FAILED'>('LOADING');
+const userStore = useUserStore();
 
+const state       = ref<'LOADING' | 'SUCCEEDED' | 'FAILED'>('LOADING');
 const sessionId   = ref<string | null>(null);
 const signup      = ref<Signup | null>(null);
 const misskeyUser = ref<{[key: string]: any} | null>(null);
-
-const isValid  = ref<boolean>(false);
-const password = ref<string>('');
-
-const userStore = useUserStore();
+const isValid     = ref<boolean>(false);
+const password    = ref<string>('');
 
 const createOrUpdateUser = async (inputPassword?: string): Promise<void> => {
   try {
