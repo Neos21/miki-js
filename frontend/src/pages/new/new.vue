@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 import { useRoute, useRouter } from 'vue-router';
 
@@ -37,7 +37,6 @@ const onSubmit = async (): Promise<void> => {
       title            : title.value,
       content          : `# ${title.value}`,
       parentDocumentId : parentDocumentId.value ?? undefined,
-      documentStructure: {},
       version          : 1,
       createdUserId    : userStore.user.id,
       updatedUserId    : userStore.user.id
@@ -91,6 +90,14 @@ onMounted(async () => {
   catch(error) {
     console.error('Failed To Fetch Parent Document', error);
     router.push('/');
+  }
+});
+
+// ルート変更時に再設定する
+watch(() => route.path, (value: string) => {
+  if(value === '/new') {
+    parentPath.value       = '';
+    parentDocumentId.value = null;
   }
 });
 </script>

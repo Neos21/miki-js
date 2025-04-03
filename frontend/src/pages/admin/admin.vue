@@ -19,3 +19,7 @@ onMounted(() => {
   }
 });
 </script>
+
+<template>
+  <p class="text-grey">Loading...</p>
+</template>

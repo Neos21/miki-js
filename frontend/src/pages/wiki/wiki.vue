@@ -6,6 +6,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { epochTimeMsToJstString } from '../../common/helpers/convert-date-to-jst';
 import { Document } from '../../common/types/document';
 import { Result } from '../../common/types/result';
+import { TreeItem } from '../../common/types/tree-item';
 import { renderMarkdown } from '../../shared/helpers/render-markdown';
 import { useTreeStore } from '../../shared/stores/use-tree-store';
 
@@ -43,7 +44,7 @@ const fetchDocument = async (): Promise<void> => {
   // 表示対象ページまでのツリーを取得しマージする (本画面が初期表示の場合も考慮して)
   try {
     const response = await fetch(`/api/tree/to-root?targetDocumentId=${currentDocument.value.id}`, { method: 'GET' });
-    const json = await response.json();
+    const json: Result<Array<TreeItem>> = await response.json();
     if(json.error != null) return console.warn('Something Wrong', json);  // ツリー表示がうまくいかない場合は無視
     
     treeStore.mergeTree(json.result);

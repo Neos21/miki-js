@@ -12,20 +12,20 @@ import { configuration } from './core/configs/configuration';
 import { AccessLogMiddleware } from './core/middlewares/access-log.middleware';
 import { AdminController } from './modules/admin/admin.controller';
 import { AdminService } from './modules/admin/admin.service';
-import { AdminMisskeyHostsController } from './modules/admin/misskey-hosts/admin-misskey-hosts.controller';
-import { AdminMisskeyHostsService } from './modules/admin/misskey-hosts/admin-misskey-hosts.service';
+import { AdminMisskeyServersController } from './modules/admin/misskey-servers/admin-misskey-servers.controller';
+import { AdminMisskeyServersService } from './modules/admin/misskey-servers/admin-misskey-servers.service';
+import { AuthController } from './modules/auth/auth.controller';
+import { AuthService } from './modules/auth/auth.service';
 import { DocumentsController } from './modules/documents/documents.controller';
 import { DocumentsService } from './modules/documents/documents.service';
-import { LoginController } from './modules/login/login.controller';
-import { LoginService } from './modules/login/login.service';
-import { MisskeyHostsController } from './modules/misskey-hosts/misskey-hosts.controller';
-import { MisskeyHostsService } from './modules/misskey-hosts/misskey-hosts.service';
+import { MisskeyServersController } from './modules/misskey-servers/misskey-servers.controller';
+import { MisskeyServersService } from './modules/misskey-servers/misskey-servers.service';
 import { TreeController } from './modules/tree/tree.controller';
 import { TreeService } from './modules/tree/tree.service';
 import { UsersController } from './modules/users/users.controller';
 import { UsersService } from './modules/users/users.service';
 import { DocumentEntity } from './shared/entities/document.entity';
-import { MisskeyHostEntity } from './shared/entities/misskey-host.entity';
+import { MisskeyServerEntity } from './shared/entities/misskey-server.entity';
 import { UserEntity } from './shared/entities/user.entity';
 
 @Module({
@@ -65,30 +65,30 @@ import { UserEntity } from './shared/entities/user.entity';
     TypeOrmModule.forFeature([
       UserEntity,
       DocumentEntity,
-      MisskeyHostEntity
+      MisskeyServerEntity
     ])
   ],
   controllers: [
     AppController,
+    AuthController,
     UsersController,
-    LoginController,
     DocumentsController,
     TreeController,
-    MisskeyHostsController,
+    MisskeyServersController,
     
     AdminController,
-    AdminMisskeyHostsController
+    AdminMisskeyServersController
   ],
   providers: [
     AppService,
+    AuthService,
     UsersService,
-    LoginService,
     DocumentsService,
     TreeService,
-    MisskeyHostsService,
+    MisskeyServersService,
     
     AdminService,
-    AdminMisskeyHostsService
+    AdminMisskeyServersService
   ]
 })
 export class AppModule {

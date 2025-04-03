@@ -5,7 +5,7 @@ import { v4 } from 'uuid';
 import { useRouter } from 'vue-router';
 
 import { isEmptyString } from '../../../common/helpers/is-empty-string';
-import { MisskeyHost } from '../../../common/types/misskey-host';
+import { MisskeyServer } from '../../../common/types/misskey-server';
 import { Result } from '../../../common/types/result';
 import { useAdminStore } from '../../../shared/stores/use-admin-store';
 
@@ -13,8 +13,8 @@ const router = useRouter();
 
 const adminStore = useAdminStore();
 
-const isValid      = ref<boolean>(false);
-const misskeyHosts = ref<Array<MisskeyHost>>([{ id: v4(), protocol: 'https://', host: '' }]);  // `:key` に指定する一意な値として UUID を指定している
+const isValid        = ref<boolean>(false);
+const misskeyServers = ref<Array<MisskeyServer>>([{ id: v4(), host: '' }]);  // NOTE : `:key` に指定する一意な値として、この画面内でのみ UUID を指定している
 
 const hostRules = [
   (value: string): boolean | string => {
@@ -24,34 +24,34 @@ const hostRules = [
 ];
 
 const onAddRow = (): void => {
-  misskeyHosts.value.push({ id: v4(), protocol: 'https://', host: '' });
+  misskeyServers.value.push({ id: v4(), host: '' });
 };
 
 const onRemoveRow = (index: number): void => {
-  misskeyHosts.value.splice(index, 1);
+  misskeyServers.value.splice(index, 1);
 };
 
 const onSave = async (): Promise<void> => {
   try {
     // バックエンドで表示順を保持できるように ID を連番に変換する
-    const misskeyHostsToPost = misskeyHosts.value.map((misskeyHost, index) => {
-      misskeyHost.id = index + 1;  // 
-      return misskeyHost;
+    const misskeyServersToPost = misskeyServers.value.map((misskeyServer, index) => {
+      misskeyServer.id = index + 1;
+      return misskeyServer;
     });
-    const response = await fetch('/api/admin/misskey-hosts', {
+    const response = await fetch('/api/admin/misskey-servers', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${adminStore.jwt}`
       },
-      body: JSON.stringify(misskeyHostsToPost)
+      body: JSON.stringify(misskeyServersToPost)
     });
-    const json = await response.json();
+    const json: Result<Array<MisskeyServer>> = await response.json();
     if(json.error != null) return console.error('Something Wrong', json);  // TODO : エラー表示
     console.log('Saved', json);
   }
   catch(error) {
-    console.error('Failed To Save Misskey Hosts', error);  // TODO : エラー表示
+    console.error('Failed To Save Misskey Servers', error);  // TODO : エラー表示
   }
 };
 
@@ -61,12 +61,12 @@ const onLogout = (): void => {
 };
 
 onMounted(async () => {
-  const response = await fetch('/api/misskey-hosts', { method: 'GET' });
-  const json: Result<Array<MisskeyHost>> = await response.json();
+  const response = await fetch('/api/misskey-servers', { method: 'GET' });
+  const json: Result<Array<MisskeyServer>> = await response.json();
   if(json.error != null) return console.error('Something Wrong', json);
-  if(json.result.length > 0) misskeyHosts.value = json.result.map(misskeyHost => {
-    misskeyHost.id = v4();
-    return misskeyHost;
+  if(json.result.length > 0) misskeyServers.value = json.result.map(misskeyServer => {
+    misskeyServer.id = v4();  // NOTE : `:key` に指定する一意な値にするため変換しておく
+    return misskeyServer;
   });
 });
 </script>
@@ -75,12 +75,11 @@ onMounted(async () => {
   <h1>管理用エリア</h1>
   
   <h2>Misskey サーバ定義</h2>
-  <p>MiAuth でアカウント登録を可能にする Misskey サーバを1つ以上設定してください。</p>
+  <p>Misskey でログインを可能にする Misskey サーバを1つ以上設定してください。</p>
   <v-form v-model="isValid" class="mt-2">
-    <div v-for="(misskeyHost, index) in misskeyHosts" :key="misskeyHost.id" class="misskey-host-row">
-      <v-select v-model="misskeyHost.protocol" :items="['https://', 'http://']" label="プロトコル" density="compact" class="misskey-host-protocol" />
-      <v-text-field v-model="misskeyHost.host" :rules="hostRules" label="Misskey サーバ URL" required density="compact" class="misskey-host" />
-      <v-btn color="error" :disabled="index === 0" class="misskey-host-remove-button" @click="onRemoveRow(index)">削除</v-btn>
+    <div v-for="(misskeyServer, index) in misskeyServers" :key="misskeyServer.id" class="misskey-server-row">
+      <v-text-field v-model="misskeyServer.host" :rules="hostRules" label="ホスト名" required density="compact" class="misskey-host" />
+      <v-btn color="error" :disabled="index === 0" class="misskey-server-remove-button" @click="onRemoveRow(index)">削除</v-btn>
     </div>
     <p><v-btn @click="onAddRow">追加</v-btn></p>
     <p class="text-right"><v-btn :disabled="!isValid" @click="onSave">保存</v-btn></p>
@@ -91,17 +90,12 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-.misskey-host-row {
+.misskey-server-row {
   display: flex;
   column-gap: .5rem;
 }
 
-.misskey-host-protocol {
-  flex-basis: 9rem;
-  flex-grow: 0;
-}
-
-.misskey-host-remove-button {
+.misskey-server-remove-button {
   flex-grow: 0;
 }
 </style>

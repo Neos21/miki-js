@@ -18,9 +18,6 @@ export class DocumentEntity {
   @Column({ nullable: true })
   public parentDocumentId: string;
   
-  @Column({ type: 'json' })
-  public documentStructure: any;
-  
   @Column({ type: 'integer' })
   public version: number;
   
