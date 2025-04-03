@@ -25,7 +25,7 @@ export class DocumentsService {
     }
   }
   
-  public async getDocumentByFullPath(fullPath: string): Promise<Result<Document>> {
+  public async findDocumentByFullPath(fullPath: string): Promise<Result<Document>> {
     try {
       const lastUri = fullPath.split('/').pop();
       const documentEntities: Array<DocumentEntity> = await this.documentsRepository.query(`
@@ -55,7 +55,7 @@ export class DocumentsService {
     }
   }
   
-  public async putDocumentById(id: string, document: Document): Promise<Result<Document>> {
+  public async saveDocumentById(id: string, document: Document): Promise<Result<Document>> {
     try {
       const targetDocument = await this.documentsRepository.findOneBy({ id });
       if(targetDocument == null) return { error: 'The Document ID Does Not Exist', code: HttpStatus.BAD_REQUEST };

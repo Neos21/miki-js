@@ -36,17 +36,17 @@ onMounted(async () => {
 <template>
   <template v-if="state === 'LOADED'">
     <h1>Miki.js</h1>
-    <p>Miki.js にようこそ！Miki.js は以下の特徴を持つ Wiki ソフトウェアです。</p>
+    <p>Miki.js にようこそ！ Miki.js は以下の特徴を持つ Wiki ソフトウェアです。</p>
     <ul>
       <li>Markdown 形式で Wiki を執筆できる</li>
       <li>
-        Misskey の MiAuth 認証機能でアカウントを作成できる
+        Misskey の認証機能でアカウントを作成・パスワードレスログインできる
         <ul>
-          <li>対応する Misskey サーバは管理者が設定可能</li>
+          <li>ログインを許可する Misskey サーバは管理者が設定可能</li>
         </ul>
       </li>
     </ul>
-    <p>あなたも Miki.js で執筆してみませんか？トップメニューの「アカウント」アイコンより、アカウントを登録して開始しましょう！</p>
+    <p>あなたも Miki.js で執筆してみませんか？ トップメニューの「アカウント」アイコンより、アカウントを登録して開始しましょう！</p>
   </template>
 </template>
 

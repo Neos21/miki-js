@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Res } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Param, Res } from '@nestjs/common';
 import { Response } from 'express';
 
 import { Result } from '../../common/types/result';
@@ -10,17 +10,9 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
   
-  @Post('')
-  public async createUser(@Body() user: User, @Res() res: Response): Promise<Response<Result<User>>> {
-    const result = await this.usersService.createUser(user);
-    if(result.error != null) return res.status(result.code ?? HttpStatus.INTERNAL_SERVER_ERROR).json(result);
-    
-    return res.status(HttpStatus.CREATED).json(result);
-  }
-  
   @Get(':id')
-  public async getUser(@Param('id') id: string, @Res() res: Response): Promise<Response<Result<User>>> {
-    const result = await this.usersService.getUser(id);
+  public async findUserById(@Param('id') id: string, @Res() res: Response): Promise<Response<Result<User>>> {
+    const result = await this.usersService.findUserById(id);
     if(result.error != null) return res.status(result.code ?? HttpStatus.INTERNAL_SERVER_ERROR).json(result);
     
     return res.status(HttpStatus.OK).json(result);

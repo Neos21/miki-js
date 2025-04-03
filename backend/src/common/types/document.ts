@@ -4,7 +4,6 @@ export type Document = {
   title?: string;
   content?: string;
   parentDocumentId?: string;
-  documentStructure?: any;
   version?: number;
   createdUserId?: string;
   updatedUserId?: string;

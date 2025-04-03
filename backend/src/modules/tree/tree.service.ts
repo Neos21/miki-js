@@ -36,8 +36,8 @@ export class TreeService {
   }
   
   public async getToRootWithSiblings(targetDocumentId: string): Promise<Result<Array<any>>> {
-    // WITH RECURSIVE で、指定されたドキュメントを起点にルートまでのパスを取得する
-    // SELECT 文で、各階層の兄弟要素を取得する
+    // WITH RECURSIVE で指定されたドキュメントを起点にルートまでのパスを取得する
+    // SELECT 文で各階層の兄弟要素を取得する
     const documentEntities: Array<DocumentEntity> = await this.documentsRepository.query(`
       WITH RECURSIVE path AS (
         SELECT id, uri, title, "parentDocumentId"

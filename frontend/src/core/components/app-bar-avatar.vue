@@ -16,7 +16,8 @@ onMounted(async () => {
     
     const response = await fetch(`/api/users/${storedUser.id}`, { method: 'GET' });
     const json: Result<User> = await response.json();
-    if(json.error != null) return console.error('Something Wrong', json);
+    if(json.error != null) return console.error('Something Wrong', json);  // TODO : エラーハンドリング
+    
     userStore.setUser(json.result);
     console.log('User Fetched', json);
   }
@@ -27,17 +28,13 @@ onMounted(async () => {
 </script>
 
 <template>
-  <v-tooltip v-if="!isEmptyObject(userStore.user)" text="アカウント" location="start">
+  <v-tooltip text="アカウント" location="start">
     <template #activator="{ props }">
-      <v-btn icon v-bind="props" link to="/user-preferences">
-        <v-img :src="userStore.user.avatarUrl" width="24" height="24" rounded="circle" />
-      </v-btn>
-    </template>
-  </v-tooltip>
-  <v-tooltip v-else text="アカウント" location="start">
-    <template #activator="{ props }">
-      <v-btn icon v-bind="props" to="/login">
+      <v-btn v-if="isEmptyObject(userStore.user)" icon v-bind="props" to="/auth">
         <v-icon>mdi-account-circle</v-icon>
+      </v-btn>
+      <v-btn v-else icon v-bind="props" to="/user-preferences">
+        <v-img :src="userStore.user.avatarUrl" width="24" height="24" rounded="circle" />
       </v-btn>
     </template>
   </v-tooltip>

@@ -1,34 +1,8 @@
-interface MisskeyUser {
-  id: string;
+/** https://【Misskey Host】/api-doc#tag/auth/POST/auth/session/userkey より・最小限使うモノのみ記載 */
+export type MisskeyUser = {
   name: string;
   username: string;
-  host: null;
   avatarUrl: string;
-  avatarBlurhash: string;
-  avatarDecorations: Array<any>;
-  isBot: boolean;
-  isCat: boolean;
-  makeNotesFollowersOnlyBefore: number;
-  emojis: {[key: string]: any}
-  onlineStatus: string;
-  badgeRoles: Array<any>;
-  url: null;
-  uri: null;
-  movedTo: null;
-  alsoKnownAs: null;
-  createdAt: string;
-  updatedAt: string;
-  lastFetchedAt: null;
-  bannerUrl: string;
-  bannerBlurhash: string;
-  isLocked: boolean;
-  isSilenced: boolean;
-  isSuspended: boolean;
-  description: string;
-  location: string;
-  birthday: string;
-  lang: string;
-  fields: Array<any>
 }
 
 export type User = {
@@ -36,16 +10,13 @@ export type User = {
   id?: string;
   misskeyUserName?: string;
   misskeyHost?: string;
-  misskeyHostProtocol?: string;
-  
-  passwordHash?: string;
   
   /** 表示名 */
   name?: string;
   avatarUrl?: string;
   
-  sessionId?: string;
   token?: string;
+  accessToken?: string;
   misskeyUser?: MisskeyUser;
   
   createdAt?: Date | string;

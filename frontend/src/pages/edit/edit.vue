@@ -10,6 +10,7 @@ import { useRoute, useRouter } from 'vue-router';
 
 import { Document } from '../../common/types/document';
 import { Result } from '../../common/types/result';
+import { TreeItem } from '../../common/types/tree-item';
 import { renderMarkdown } from '../../shared/helpers/render-markdown';
 import { titleRules } from '../../shared/helpers/validator-document-title-rules';
 import { useTreeStore } from '../../shared/stores/use-tree-store';
@@ -46,7 +47,7 @@ const onSave = async () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(documentToSave)
     });
-    const json = await response.json();
+    const json: Result<Document> = await response.json();
     if(json.error != null) {
       console.error('Something Wrong', json);
       return alert(`Error : ${json.error}`);  // TODO : エラー表示
@@ -86,7 +87,7 @@ onMounted(async () => {
   const fetchTree = async (targetDocumentId: string): Promise<Result<boolean>> => {
     try {
       const response = await fetch(`/api/tree/to-root?targetDocumentId=${targetDocumentId}`, { method: 'GET' });
-      const json = await response.json();
+      const json: Result<Array<TreeItem>> = await response.json();
       if(json.error != null) {
         console.warn('');  // ツリー表示がうまくいかない場合は無視
         return { error: json.error, code: json.code ?? 500 };

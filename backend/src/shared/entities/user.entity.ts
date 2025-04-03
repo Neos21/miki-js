@@ -6,39 +6,31 @@ export class UserEntity {
   @PrimaryColumn({ unique: true })
   public id: string;
   
-  /** MiAuth より取得・変更不可 */
+  /** Misskey 認証の中で取得する・変更不可 */
   @Column()
   public misskeyUserName: string;
   
-  /** MiAuth より取得・変更不可 */
+  /** Misskey 認証開始時にユーザが選択する・変更不可 */
   @Column()
   public misskeyHost: string;
-  
-  /** MiAuth の API を叩く時に使用する・変更不可 */
-  @Column({ default: 'https://' })
-  public misskeyHostProtocol: 'https://' | 'http://';
-  
-  /** パスワードハッシュ・デフォルトでは SELECT しても取得できないようにする */
-  @Column({ select: false })
-  public passwordHash: string;
   
   /** ユーザ表示名・任意に変更可能 */
   @Column()
   public name: string;
   
-  /** 初回は MiAuth より取得・任意に変更可能 */
+  /** 初回は Misskey 認証後に取得・任意に変更可能とする */
   @Column({ nullable: true })
   public avatarUrl: string;
   
-  /** MiAuth で使用したモノを保持する */
-  @Column()
-  public sessionId: string;
-  
-  /** MiAuth で発行したモノを保持する */
-  @Column()
+  /** Misskey 認証中に発行されたモノを保持しておく */
+  @Column({ select: false })
   public token: string;
   
-  /** MiAuth の Check API で取得できた値を入れる */
+  /** Misskey 認証時に発行されたモノを保持しておく */
+  @Column({ select: false })
+  public accessToken: string;
+  
+  /** Misskey 認証時に取得できた値を入れておく */
   @Column({ type: 'json' })
   public misskeyUser: any;
   

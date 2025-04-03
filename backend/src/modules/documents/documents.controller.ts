@@ -19,17 +19,17 @@ export class DocumentsController {
   }
   
   @Get('*path')
-  public async getDocument(@Req() req: Request, @Res() res: Response): Promise<Response<Result<Document>>> {
+  public async findDocument(@Req() req: Request, @Res() res: Response): Promise<Response<Result<Document>>> {
     const fullPath = decodeURIComponent(req.url.replace(/^\/api\/documents\//, ''));
-    const result = await this.documentsService.getDocumentByFullPath(fullPath);
+    const result = await this.documentsService.findDocumentByFullPath(fullPath);
     if(result.error != null) return res.status(result.code ?? HttpStatus.INTERNAL_SERVER_ERROR).json(result);
     
     return res.status(HttpStatus.OK).json(result);
   }
   
   @Put(':id')
-  public async putDocument(@Param('id') id: string, @Body() document: Document, @Res() res: Response): Promise<Response<Result<Document>>> {
-    const result = await this.documentsService.putDocumentById(id, document);
+  public async saveDocument(@Param('id') id: string, @Body() document: Document, @Res() res: Response): Promise<Response<Result<Document>>> {
+    const result = await this.documentsService.saveDocumentById(id, document);
     if(result.error != null) return res.status(result.code ?? HttpStatus.INTERNAL_SERVER_ERROR).json(result);
     
     return res.status(HttpStatus.OK).json(result);
