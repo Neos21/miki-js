@@ -16,13 +16,16 @@ onMounted(async () => {
     
     const response = await fetch(`/api/users/${storedUser.id}`, { method: 'GET' });
     const json: Result<User> = await response.json();
-    if(json.error != null) return console.error('Something Wrong', json);  // TODO : エラーハンドリング
+    if(json.error != null) {
+      console.error('Failed To Fetch User', json);
+      return;
+    }
     
     userStore.setUser(json.result);
     console.log('User Fetched', json);
   }
   catch(error) {
-    console.error('Failed To Fetch User', error);
+    console.error('Fetch User : Unknown Error', error);
   }
 });
 </script>

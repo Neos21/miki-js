@@ -25,7 +25,8 @@ const vuetify = createVuetify({
     themes: {
       light: {  // テーマ名
         colors: {
-          primary: '#1976d2'
+          primary: '#1976d2',
+          error  : '#e91e63'
         }
       }
     }

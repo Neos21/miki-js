@@ -17,7 +17,12 @@ onMounted(async () => {
     const response = await fetch('/api/documents/home', { method: 'GET' });
     const json: Result<Document> = await response.json();
     if(json.error != null) {
-      console.warn('Something Wrong (Maybe Home Document Does Not Exist)', json);
+      if(json.code === 404) {
+        console.log('Home Document Does Not Exist. Show Default Home Page', json);
+      }
+      else {
+        console.warn('Failed To Fetch Home Document. Show Default Home Page Instead', json);
+      }
       state.value = 'LOADED';
       return;
     }
@@ -26,7 +31,7 @@ onMounted(async () => {
     router.push('/wiki/home');
   }
   catch(error) {
-    console.error('Failed To Fetch Home Document', error);
+    console.warn('Fetch Home Document : Unknown Error. Show Default Home Page Instead', error);
     state.value = 'LOADED';
     return;
   }

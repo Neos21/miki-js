@@ -20,4 +20,24 @@ export class UsersService {
       return { error, code: HttpStatus.INTERNAL_SERVER_ERROR };
     }
   }
+  
+  public async saveUserById(id: string, user: User): Promise<Result<User>> {
+    try {
+      await this.usersRepository.update(id, user as UserEntity);
+      return this.findUserById(id);
+    }
+    catch(error) {
+      return { error, code: HttpStatus.INTERNAL_SERVER_ERROR };
+    }
+  }
+  
+  public async removeUserById(id: string): Promise<Result<boolean>> {
+    try {
+      await this.usersRepository.delete(id);
+      return { result: true };
+    }
+    catch(error) {
+      return { error, code: HttpStatus.INTERNAL_SERVER_ERROR };
+    }
+  }
 }

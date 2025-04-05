@@ -26,6 +26,8 @@ const path           = ref<string>('');
 const isValid        = ref<boolean>(false);
 const targetDocument = ref<Document | null>(null);
 const title          = ref<string>('');
+const isOpenedDialog = ref<boolean>(false);
+const errorMessage   = ref<string>('');
 
 const editor = ref<HTMLDivElement | null>(null);
 let editorView: EditorView | null = null;
@@ -34,6 +36,8 @@ const onSave = async () => {
   const getMarkdown = () => editorView == null ? '' : defaultMarkdownSerializer.serialize(editorView.state.doc);
   
   try {
+    errorMessage.value = '';
+    
     const documentToSave = targetDocument.value!;
     documentToSave.title         = title.value;
     documentToSave.content       = getMarkdown();
@@ -49,16 +53,17 @@ const onSave = async () => {
     });
     const json: Result<Document> = await response.json();
     if(json.error != null) {
-      console.error('Something Wrong', json);
-      return alert(`Error : ${json.error}`);  // TODO : エラー表示
+      console.error('Failed To Save Document', json);
+      errorMessage.value = `ドキュメントの保存に失敗しました : ${json.code} ${json.error}`;
+      return;
     }
     
     console.log('Document Saved', json);
     router.push(`/wiki/${path.value}`);
   }
-  catch(error) {
-    console.error('Failed To Save Document', error);
-    alert('Error : Failed To Save Document');  // TODO : エラー表示
+  catch(error: any) {
+    console.error('Save Document : Unknown Error', error);
+    errorMessage.value = `ドキュメントの保存に失敗しました : ${error.toString()}`;
   }
 };
 
@@ -70,16 +75,16 @@ onMounted(async () => {
       const response = await fetch(`/api/documents/${path.value}`, { method: 'GET' });
       const json: Result<Document> = await response.json();
       if(json.error != null) {
-        console.error('Something Wrong', json);
+        console.error('Failed To Fetch Document', json);
         return json;
       }
       
       console.log('Document Fetched', json);
       return json;
     }
-    catch(error) {
-      console.error('Failed To Fetch Document', error);
-      return { error: error as string };
+    catch(error: any) {
+      console.error('Fetch Document : Unknown Error', error);
+      return { error: error.toString() };
     }
   };
   
@@ -89,16 +94,16 @@ onMounted(async () => {
       const response = await fetch(`/api/tree/to-root?targetDocumentId=${targetDocumentId}`, { method: 'GET' });
       const json: Result<Array<TreeItem>> = await response.json();
       if(json.error != null) {
-        console.warn('');  // ツリー表示がうまくいかない場合は無視
-        return { error: json.error, code: json.code ?? 500 };
+        console.warn('Failed To Fetch tree');  // ツリー表示がうまくいかない場合は無視
+        return json;
       }
       
       treeStore.mergeTree(json.result);
       return { result: true };
     }
-    catch(error) {
-      console.warn('Failed To Fetch Tree', error);  // ツリー表示がうまくいかない場合は無視
-      return { error: error as string, code: 500 };
+    catch(error: any) {
+      console.warn('Fetch Tree : Unknown Error', error);  // ツリー表示がうまくいかない場合は無視
+      return { error: error.toString(), code: 500 };
     }
   };
   
@@ -121,7 +126,7 @@ onMounted(async () => {
   editorView = new EditorView(editor.value as HTMLDivElement, {
     state: EditorState.create({
       doc: markdownToProseMirrorDoc(fetchedDocumentResult.result.content!),
-      plugins: exampleSetup({schema}),
+      plugins: exampleSetup({schema})
     }),
     dispatchTransaction: transaction => {
       if(editorView == null) return;
@@ -142,6 +147,15 @@ onBeforeUnmount(() => {
     <v-btn :disabled="!isValid" @click="onSave">保存</v-btn>
   </v-form>
   <div ref="editor" class="editor" spellcheck="false" />
+  
+  <v-dialog v-model="isOpenedDialog">
+    <v-sheet>
+      <v-sheet class="my-3 mx-3">
+        <v-alert type="error" density="compact" :text="errorMessage" />
+        <p class="text-right"><v-btn @click="isOpenedDialog = false">Close</v-btn></p>
+      </v-sheet>
+    </v-sheet>
+  </v-dialog>
 </template>
 
 <style scoped>

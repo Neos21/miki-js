@@ -67,7 +67,7 @@ h2 {
 }
 
 hr {
-  margin: 1.5rem 0;
+  margin: 3rem 0;
 }
 
 h3,
@@ -86,4 +86,21 @@ pre {
   border: 1px solid #999;
   border-radius: 4px;
   padding: .75rem;
+}
+
+dt {
+  margin-top: .5rem;
+  font-weight: bold;
+}
+
+dd {
+  margin-left: 1.85rem;
+}
+  dd > :first-child {
+    margin-top: 0;
+  }
+
+/* Alert Close Button */
+.v-alert__close .v-btn {
+  color: #fff !important;
 }

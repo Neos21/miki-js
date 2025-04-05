@@ -26,9 +26,8 @@ const fetchDocument = async (): Promise<void> => {
     const response = await fetch(`/api/documents/${path.value}`, { method: 'GET' });
     const json: Result<Document> = await response.json();
     if(json.error != null) {
-      console.error('Something Wrong', json);
-      router.push('/');
-      return;
+      console.error('Failed To Fetch Document', json);
+      return router.push('/') as unknown as void;
     }
     
     console.log('Document Fetched', json);
@@ -36,21 +35,20 @@ const fetchDocument = async (): Promise<void> => {
     htmlContent.value     = renderMarkdown(json.result.content!);
   }
   catch(error) {
-    console.error('Failed To Fetch Document', error);
-    router.push('/');
-    return;
+    console.error('Fetch Document : Unknown Error', error);
+    return router.push('/') as unknown as void;
   }
   
   // 表示対象ページまでのツリーを取得しマージする (本画面が初期表示の場合も考慮して)
   try {
     const response = await fetch(`/api/tree/to-root?targetDocumentId=${currentDocument.value.id}`, { method: 'GET' });
     const json: Result<Array<TreeItem>> = await response.json();
-    if(json.error != null) return console.warn('Something Wrong', json);  // ツリー表示がうまくいかない場合は無視
+    if(json.error != null) return console.warn('Failed To Fetch Tree', json);  // ツリー表示がうまくいかない場合は無視
     
     treeStore.mergeTree(json.result);
   }
   catch(error) {
-    console.warn('Failed To Fetch Tree', error);  // ツリー表示がうまくいかない場合は無視
+    console.warn('Fetch Tree : Unknown Error', error);  // ツリー表示がうまくいかない場合は無視
   }
 };
 

@@ -19,6 +19,7 @@ const parentDocumentId = ref<string | null>(null);
 const isValid          = ref<boolean>(false);
 const uri              = ref<string>('');
 const title            = ref<string>('');
+const errorMessage     = ref<string>('');
 
 const uriRules = [
   (value: string): boolean | string => {
@@ -48,8 +49,9 @@ const onSubmit = async (): Promise<void> => {
     });
     const json: Result<Document> = await response.json();
     if(json.error != null) {
-      console.error('Something Wrong', json);
-      return alert(`Error : ${json.error}`);  // TODO : エラー表示
+      console.error('Failed To Create Document', json);
+      errorMessage.value = `ドキュメントの新規作成に失敗しました : ${json.code} ${json.error}`;
+      return;
     }
     console.log('Document Created', json);
     
@@ -61,14 +63,15 @@ const onSubmit = async (): Promise<void> => {
       router.push(`/wiki/${parentPath.value}/${uri.value}`);
     }
   }
-  catch(error) {
-    console.error('Failed To Create Document', error);
-    alert('Error : Failed To Create Document');  // TODO : エラー表示
+  catch(error: any) {
+    console.error('Create Document : Unknown Error', error);
+    errorMessage.value = `ドキュメントの新規作成に失敗しました : ${error.toString()}`;
   }
 };
 
 onMounted(async () => {
   parentPath.value = (route.params.catchAll as string ?? '').replace(/(?<!^)(\/*)$/, '');
+  // ルート直下にドキュメントを新規作成する場合
   if(isEmptyString(parentPath.value)) {
     parentDocumentId.value = null;
     return;
@@ -79,16 +82,15 @@ onMounted(async () => {
     const response = await fetch(`/api/documents/${parentPath.value}`, { method: 'GET' });
     const json: Result<Document> = await response.json();
     if(json.error != null) {
-      console.error('Something Wrong', json);
-      router.push('/');
-      return;
+      console.error('Failed To Fetch Parent Document', json);
+      return router.push('/');
     }
     
     parentDocumentId.value = json.result.id!;
-    console.log('Document Fetched', json);
+    console.log('Parent Document Fetched', json);
   }
   catch(error) {
-    console.error('Failed To Fetch Parent Document', error);
+    console.error('Fetch Parent Document : Unknown Error', error);
     router.push('/');
   }
 });
@@ -110,4 +112,5 @@ watch(() => route.path, (value: string) => {
     <p><v-text-field v-model="title" :rules="titleRules" label="タイトル" required /></p>
     <p><v-btn :disabled="!isValid" @click="onSubmit">作成</v-btn></p>
   </v-form>
+  <v-alert v-if="!isEmptyString(errorMessage)" type="error" density="compact" class="mt-5" :text="errorMessage" closable />
 </template>
